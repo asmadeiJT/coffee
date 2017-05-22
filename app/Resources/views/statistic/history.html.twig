@@ -1,0 +1,23 @@
+<div>
+    <h2>Last 20 coffee cups</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <td>Coffee addict Name</td>
+            <td>Cups</td>
+            <td>Date</td>
+            <td>Action</td>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in results %}
+            <tr>
+                <td>{{ item['name'] }}</td>
+                <td>{{ item['cups'] }}</td>
+                <td>{{ item['create_date']|date("m/d/Y h:i:s") }}</td>
+                <td>action</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

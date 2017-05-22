@@ -1,0 +1,23 @@
+<div>
+    <h2>Totals</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <td>Coffee addict Name</td>
+            <td>Total Cups</td>
+        </tr>
+        </thead>
+        <tbody>
+            {% for item in totals %}
+                <tr>
+                    <td>{{ item['name'] }}</td>
+                    <td>{{ item['totalCups'] }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td>Total cups:</td>
+                <td>{{ totalCups }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
