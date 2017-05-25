@@ -31,7 +31,7 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
 
-        $qb->select('u.name', 'a.cups', 'a.create_date')
+        $qb->select('u.name', 'a.id', 'a.cups', 'a.create_date')
             ->from('AppBundle\Entity\Cup', 'a')
             ->leftJoin(
                 'AppBundle\Entity\User',
