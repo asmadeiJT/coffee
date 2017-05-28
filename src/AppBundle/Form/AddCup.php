@@ -3,29 +3,25 @@
 namespace AppBundle\Form;
 
 use AppBundle\Entity\Cup;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Doctrine\ORM\EntityRepository;
 
 class AddCup extends AbstractType
 {
 public function buildForm(FormBuilderInterface $builder, array $options)
 {
     $builder
-        ->add('user_id', ChoiceType::class, array(
+        ->add('user_id', EntityType::class, array(
             'label' => 'Coffee addict Name',
-            'choices' => array(
-                1 => 'Vasiliy',
-                2 => 'Stepan',
-                3 => 'Max',
-                4 => 'Yury',
-                5 => 'Vitaly',
-                6 => 'Evgeny_S',
-                7 => 'Evgeny_N'
-            )
+            'class'=>'AppBundle\Entity\User',
+            'query_builder'=> function(EntityRepository $er){
+                return $er->createQueryBuilder('c')->orderBy('c.name','ASC');},
+            'choice_label' => 'name'
         ))
         ->add('cups', ChoiceType::class, array(
             'label' => 'Count of cups',
