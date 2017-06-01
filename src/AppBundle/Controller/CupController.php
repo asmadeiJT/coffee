@@ -24,7 +24,7 @@ class CupController extends Controller
             $data = $form->getData();
 
             $cup->setCups($data->getCups());
-            $cup->setUserId($data->getUserId());
+            $cup->setUserId($data->getUserId()->getId());
             $cup->setCreateDate(new \DateTime());
 
             $em = $this->getDoctrine()->getManager();

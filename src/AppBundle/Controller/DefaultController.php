@@ -60,6 +60,8 @@ class DefaultController extends Controller
                 \Doctrine\ORM\Query\Expr\Join::WITH,
                 'a.user_id = u.id'
             )
+            ->where('a.create_date > :date')
+            ->setParameter('date', new \DateTime('midnight first day of this month'))
             ->groupBy('u.name')
             ->orderBy('totalCups', 'DESC');
 
