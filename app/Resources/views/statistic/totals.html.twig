@@ -4,19 +4,19 @@
         <thead>
         <tr>
             <td>Coffee addict Name</td>
-            <td>Total Cups</td>
+            <td>Total Cost</td>
         </tr>
         </thead>
         <tbody>
             {% for item in totals %}
                 <tr>
                     <td>{{ item['name'] }}</td>
-                    <td>{{ item['totalCups'] }}</td>
+                    <td>{{ item['totalCost'] }}</td>
                 </tr>
             {% endfor %}
             <tr>
-                <td>Total cups:</td>
-                <td>{{ totalCups }}</td>
+                <td>Total spent:</td>
+                <td>{{ totalCost }}</td>
             </tr>
         </tbody>
     </table>
