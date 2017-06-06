@@ -23,7 +23,7 @@ public function buildForm(FormBuilderInterface $builder, array $options)
                 return $er->createQueryBuilder('c')->orderBy('c.name','ASC');},
             'choice_label' => 'name'
         ))
-        ->add('cups', ChoiceType::class, array(
+        ->add('cost', ChoiceType::class, array(
             'label' => 'Count of cups',
             'choices' => array(
                 1 => 'One',

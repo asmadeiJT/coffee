@@ -25,7 +25,7 @@ class Cup
     /**
      * @ORM\Column(type="integer")
      */
-    private $cups;
+    private $cost;
 
     /**
      * @ORM\Column(type="datetime")
@@ -66,25 +66,25 @@ class Cup
     }
 
     /**
-     * Get cups
+     * Get cost
      *
      * @return integer
      */
-    public function getCups()
+    public function getCost()
     {
-        return $this->cups;
+        return $this->cost;
     }
 
     /**
-     * Set cups
+     * Set cost
      *
-     * @param integer $cups
+     * @param integer $cost
      *
      * @return Cup
      */
-    public function setCups($cups)
+    public function setCost($cost)
     {
-        $this->cups = $cups;
+        $this->cost = $cost;
 
         return $this;
     }

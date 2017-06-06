@@ -23,7 +23,8 @@ class CupController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
-            $cup->setCups($data->getCups());
+            $cost = $data->getCost() * 28;
+            $cup->setCost($cost);
             $cup->setUserId($data->getUserId()->getId());
             $cup->setCreateDate(new \DateTime());
 

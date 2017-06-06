@@ -20,7 +20,7 @@ class DefaultController extends Controller
             'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
             'results'   => $results,
             'totals'    => $totals,
-            'totalCups' => array_sum(array_column($totals, 'totalCups'))
+            'totalCost' => array_sum(array_column($totals, 'totalCost'))
         ));
     }
 
@@ -31,7 +31,7 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
 
-        $qb->select('u.name', 'a.id', 'a.cups', 'a.create_date')
+        $qb->select('u.name', 'a.id', 'a.cost', 'a.create_date')
             ->from('AppBundle\Entity\Cup', 'a')
             ->leftJoin(
                 'AppBundle\Entity\User',
@@ -52,7 +52,7 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
 
-        $qb->select('u.name', 'SUM(a.cups) as totalCups')
+        $qb->select('u.name', 'SUM(a.cost) as totalCost')
             ->from('AppBundle\Entity\Cup', 'a')
             ->leftJoin(
                 'AppBundle\Entity\User',
@@ -63,7 +63,7 @@ class DefaultController extends Controller
             ->where('a.create_date > :date')
             ->setParameter('date', new \DateTime('midnight first day of this month'))
             ->groupBy('u.name')
-            ->orderBy('totalCups', 'DESC');
+            ->orderBy('totalCost', 'DESC');
 
 
         return $qb->getQuery()->getResult();
