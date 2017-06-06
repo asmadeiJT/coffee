@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   KEY `id` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
--- Dumping data for table symfony.users: ~6 rows (approximately)
+-- Dumping data for table symfony.users: ~7 rows (approximately)
 DELETE FROM `users`;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `Name`) VALUES
@@ -235,7 +235,25 @@ INSERT INTO `сoffee_consumption` (`id`, `user_id`, `cups`, `create_date`) VALUE
 	(192, 5, 1, '2017-06-02 13:30:04'),
 	(193, 4, 1, '2017-06-02 13:59:31'),
 	(194, 1, 1, '2017-06-02 14:57:23'),
-	(195, 7, 1, '2017-06-02 15:01:56');
+	(195, 7, 1, '2017-06-02 15:01:56'),
+	(196, 3, 1, '2017-06-05 10:52:01'),
+	(197, 1, 1, '2017-06-05 10:52:08'),
+	(198, 4, 1, '2017-06-05 10:52:12'),
+	(199, 6, 1, '2017-06-05 10:52:20'),
+	(200, 1, 1, '2017-06-05 11:46:07'),
+	(201, 2, 1, '2017-06-05 13:06:02'),
+	(202, 3, 1, '2017-06-05 14:18:54'),
+	(203, 7, 1, '2017-06-05 14:22:09'),
+	(204, 1, 1, '2017-06-05 14:22:18'),
+	(205, 6, 1, '2017-06-05 15:09:43'),
+	(206, 5, 1, '2017-06-05 16:28:20'),
+	(207, 5, 1, '2017-06-05 17:32:21'),
+	(208, 6, 1, '2017-06-05 17:32:24'),
+	(209, 4, 1, '2017-06-05 17:32:28'),
+	(210, 1, 1, '2017-06-05 17:57:06'),
+	(211, 1, 1, '2017-06-06 11:24:27'),
+	(212, 3, 1, '2017-06-06 11:24:31'),
+	(213, 6, 1, '2017-06-06 11:24:34');
 /*!40000 ALTER TABLE `сoffee_consumption` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
