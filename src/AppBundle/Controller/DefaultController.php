@@ -49,8 +49,10 @@ class DefaultController extends Controller
      * Get totals of coffee consumption
      */
     public function getTotals() {
-        $em = $this->getDoctrine()->getManager();
-        $qb = $em->createQueryBuilder();
+        $em         = $this->getDoctrine()->getManager();
+        $qb         = $em->createQueryBuilder();
+        $fromDate   = $this->getSettingByName('calculation_from')[0]['value'];
+        $toDate     = $this->getSettingByName('calculation_to')[0]['value'];
 
         $qb->select('u.name', 'SUM(a.cost) as totalCost')
             ->from('AppBundle\Entity\Cup', 'a')
@@ -60,11 +62,23 @@ class DefaultController extends Controller
                 \Doctrine\ORM\Query\Expr\Join::WITH,
                 'a.user_id = u.id'
             )
-            ->where('a.create_date > :date')
-            ->setParameter('date', new \DateTime('midnight first day of this month'))
+            ->where('a.create_date > :from_date AND a.create_date < :to_date')
+            ->setParameters(array('to_date' => $toDate, 'from_date' => $fromDate))
             ->groupBy('u.name')
             ->orderBy('totalCost', 'DESC');
 
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function getSettingByName($name) {
+        $em = $this->getDoctrine()->getManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb->select('s.value')
+            ->from('AppBundle\Entity\Settings', 's')
+            ->where('s.name = :name')
+            ->setParameter('name', $name);
 
         return $qb->getQuery()->getResult();
     }
