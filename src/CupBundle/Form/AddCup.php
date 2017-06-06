@@ -1,8 +1,8 @@
 <?php
 
-namespace AppBundle\Form;
+namespace CupBundle\Form;
 
-use AppBundle\Entity\Cup;
+use CupBundle\Entity\Cup;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,7 +18,7 @@ public function buildForm(FormBuilderInterface $builder, array $options)
     $builder
         ->add('user_id', EntityType::class, array(
             'label' => 'Coffee addict Name',
-            'class'=>'AppBundle\Entity\User',
+            'class'=>'UserBundle\Entity\User',
             'query_builder'=> function(EntityRepository $er){
                 return $er->createQueryBuilder('c')->orderBy('c.name','ASC');},
             'choice_label' => 'name'
