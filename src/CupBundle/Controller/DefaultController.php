@@ -36,7 +36,7 @@ class DefaultController extends Controller
             return $this->redirectToRoute('homepage');
         }
 
-        return $this->render('page/add/cup.html.twig', array(
+        return $this->render('CupBundle:Default:add/cup.html.twig', array(
             'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
             'form'      => $formView
         ));

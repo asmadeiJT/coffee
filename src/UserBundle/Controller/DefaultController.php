@@ -23,6 +23,8 @@ class DefaultController extends Controller
             $data = $form->getData();
 
             $cup->setName($data->getName());
+            $cup->setType($data->getType());
+            $cup->setAmortization($data->getAmortization());
 
             $em = $this->getDoctrine()->getManager();
 
@@ -32,7 +34,7 @@ class DefaultController extends Controller
             return $this->redirectToRoute('homepage');
         }
 
-        return $this->render('page/add/user.html.twig', array(
+        return $this->render('UserBundle:Default:add/user.html.twig', array(
             'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
             'form'      => $formView
         ));

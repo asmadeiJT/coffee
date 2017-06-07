@@ -1,16 +1,15 @@
 <?php
 
-namespace UserBundle\Form;
+namespace SettingsBundle\Form;
 
-use UserBundle\Entity\User;
+use SettingsBundle\Entity\Settings;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
-class AddUser extends AbstractType
+class AddSettings extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -18,22 +17,11 @@ class AddUser extends AbstractType
             ->add('Name', TextType::class, array(
                 'label' => 'Name'
             ))
-            ->add('Type', ChoiceType::class, array(
-                'label' => 'Type',
-                'choices' => array(
-                    'owner' => 'Owner',
-                    'buyer' => 'Buyer',
-                )
-            ))
-            ->add('Amortization', ChoiceType::class, array(
-                'label' => 'Amortization',
-                'choices' => array(
-                    0 => 'No',
-                    1 => 'Yes',
-                )
+            ->add('Value', TextType::class, array(
+                'label' => 'Value'
             ))
             ->add('submit', SubmitType::class, array(
-                'label' => 'Add User',
+                'label' => 'Add setting',
                 'attr'  => array('class' => 'btn btn-default pull-right')
             ));
     }
@@ -41,7 +29,7 @@ class AddUser extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => User::class
+            'data_class' => Settings::class
         ));
     }
 }
