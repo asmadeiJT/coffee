@@ -1,6 +1,6 @@
 <?php
-// src/AppBundle/Entity/Cup.php
-namespace AppBundle\Entity;
+// src/CupBundle/Entity/Cup.php
+namespace CupBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 

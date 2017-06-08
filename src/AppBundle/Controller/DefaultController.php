@@ -32,9 +32,9 @@ class DefaultController extends Controller
         $qb = $em->createQueryBuilder();
 
         $qb->select('u.name', 'a.id', 'a.cost', 'a.create_date')
-            ->from('AppBundle\Entity\Cup', 'a')
+            ->from('CupBundle\Entity\Cup', 'a')
             ->leftJoin(
-                'AppBundle\Entity\User',
+                'UserBundle\Entity\User',
                 'u',
                 \Doctrine\ORM\Query\Expr\Join::WITH,
                 'a.user_id = u.id'
@@ -55,9 +55,9 @@ class DefaultController extends Controller
         $toDate     = $this->getSettingByName('calculation_to')[0]['value'];
 
         $qb->select('u.name', 'SUM(a.cost) as totalCost')
-            ->from('AppBundle\Entity\Cup', 'a')
+            ->from('CupBundle\Entity\Cup', 'a')
             ->leftJoin(
-                'AppBundle\Entity\User',
+                'UserBundle\Entity\User',
                 'u',
                 \Doctrine\ORM\Query\Expr\Join::WITH,
                 'a.user_id = u.id'

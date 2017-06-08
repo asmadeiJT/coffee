@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Ingredient{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-4 col-md-4">
+                <h2>Add new ingredient</h2>
+                {{ form_start(form, {'attr': {'class': 'add-ingredient'} }) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+            </div>
+            <div class="col-4 col-md-4"></div>
+            <div class="col-4 col-md-4"></div>
+        </div>
+    </div>
+{% endblock %}

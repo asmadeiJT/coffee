@@ -1,6 +1,6 @@
 <?php
-// src/AppBundle/Entity/Settings.php
-namespace AppBundle\Entity;
+// src/SettingsBundle/Entity/Settings.php
+namespace SettingsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 

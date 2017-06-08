@@ -1,15 +1,15 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace CupBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Entity\Cup;
-use AppBundle\Form\AddCup;
+use CupBundle\Entity\Cup;
+use CupBundle\Form\AddCup;
 
-class CupController extends Controller
+class DefaultController extends Controller
 {
     /**
      * @Route("/cup/add", name="add_cup")
@@ -36,7 +36,7 @@ class CupController extends Controller
             return $this->redirectToRoute('homepage');
         }
 
-        return $this->render('page/add/cup.html.twig', array(
+        return $this->render('CupBundle:Default:add/cup.html.twig', array(
             'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
             'form'      => $formView
         ));
@@ -48,7 +48,7 @@ class CupController extends Controller
     public function deleteAction(Request $request) {
         $em     = $this->getDoctrine()->getManager();
         $id     = $request->get('id');
-        $cup    = $em->getRepository('AppBundle:Cup')->find($id);
+        $cup    = $em->getRepository('CupBundle:Cup')->find($id);
 
         if (!$cup) {
             throw $this->createNotFoundException('No guest found');

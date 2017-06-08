@@ -1,6 +1,6 @@
 <?php
-// src/AppBundle/Entity/Ingredient.php
-namespace AppBundle\Entity;
+// src/IngredientBundle/Entity/Ingredient.php
+namespace IngredientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 

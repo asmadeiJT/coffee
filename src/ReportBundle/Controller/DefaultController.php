@@ -1,12 +1,12 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace ReportBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 
-class ReportController extends Controller
+class DefaultController extends Controller
 {
     /**
      * @Route("/report", name="report")

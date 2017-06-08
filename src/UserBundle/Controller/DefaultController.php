@@ -1,14 +1,14 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace UserBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Entity\User;
-use AppBundle\Form\AddUser;
+use UserBundle\Entity\User;
+use UserBundle\Form\AddUser;
 
-class UserController extends Controller
+class DefaultController extends Controller
 {
     /**
      * @Route("/user/add", name="add_user")
@@ -23,6 +23,8 @@ class UserController extends Controller
             $data = $form->getData();
 
             $cup->setName($data->getName());
+            $cup->setType($data->getType());
+            $cup->setAmortization($data->getAmortization());
 
             $em = $this->getDoctrine()->getManager();
 
@@ -32,7 +34,7 @@ class UserController extends Controller
             return $this->redirectToRoute('homepage');
         }
 
-        return $this->render('page/add/user.html.twig', array(
+        return $this->render('UserBundle:Default:add/user.html.twig', array(
             'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
             'form'      => $formView
         ));
