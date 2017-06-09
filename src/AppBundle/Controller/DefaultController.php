@@ -76,7 +76,7 @@ class DefaultController extends Controller
         $qb = $em->createQueryBuilder();
 
         $qb->select('s.value')
-            ->from('AppBundle\Entity\Settings', 's')
+            ->from('SettingsBundle\Entity\Settings', 's')
             ->where('s.name = :name')
             ->setParameter('name', $name);
 

@@ -28,9 +28,9 @@ class User
     private $type;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", options={"default" : 0})
      */
-    private $amortization = 0;
+    private $amortization;
 
     /**
      * Get id
