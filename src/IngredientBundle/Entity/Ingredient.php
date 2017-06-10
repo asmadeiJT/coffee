@@ -28,6 +28,11 @@ class Ingredient
     private $cost;
 
     /**
+     * @ORM\Column(type="boolean", options={"default" : 1})
+     */
+    private $isActive;
+
+    /**
      * Get id
      *
      * @return integer
@@ -85,4 +90,27 @@ class Ingredient
         return $this->cost;
     }
 
+    /**
+     * Set ingredient active
+     *
+     * @param boolean $isActive
+     *
+     * @return Ingredient
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get is active
+     *
+     * @return boolean
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
 }

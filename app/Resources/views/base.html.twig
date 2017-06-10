@@ -8,6 +8,11 @@
         <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
     </head>
     <body>
+        <div class="container popover-content">
+            <div class="row text-center">
+                {% include 'page/header.html.twig' %}
+            </div>
+        </div>
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
         <script src="{{ asset('js/jquery.js') }}"></script>

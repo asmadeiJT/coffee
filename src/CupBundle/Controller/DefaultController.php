@@ -15,13 +15,13 @@ class DefaultController extends Controller
      * @Route("/cup/add", name="add_cup")
      */
     public function addAction(Request $request) {
-        $cup        = new Cup();
-        $form       = $this->createForm(AddCup::class, $cup);
-        $formView   = $form->createView();
+        $form     = $this->createForm(AddCup::class);
+        $formView = $form->createView();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
+            $cup  = new Cup();
 
             $cost = $data->getCost() * 28;
             $cup->setCost($cost);

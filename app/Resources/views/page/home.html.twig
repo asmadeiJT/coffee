@@ -4,17 +4,6 @@
 
 {% block body %}
     <div class="container popover-content">
-        <div class="row text-center">
-            <div class="col-4 col-md-4 col-xs-4">
-                <a href="{{ path('add_cup') }}" class="btn btn-primary btn-lg active">Add cup</a>
-            </div>
-            <div class="col-4 col-md-4">
-                <a href="{{ path('add_user') }}" class="btn btn-primary btn-lg active">Add user</a>
-            </div>
-            <div class="col-4 col-md-4">
-                <a href="#" class="btn btn-primary btn-lg active">Generate report</a>
-            </div>
-        </div>
         <div class="row">
             <div class="col-6 col-md-6">
                 {% include 'statistic/history.html.twig' %}
