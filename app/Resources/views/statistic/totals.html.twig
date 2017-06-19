@@ -1,23 +1,19 @@
 <div>
-    <h2>Totals</h2>
+    <h2>Money</h2>
     <table class="table">
         <thead>
         <tr>
             <td>Coffee addict Name</td>
-            <td>Total Cost</td>
+            <td>Balance</td>
         </tr>
         </thead>
         <tbody>
             {% for item in totals %}
                 <tr>
                     <td>{{ item['name'] }}</td>
-                    <td>{{ item['totalCost'] }}</td>
+                    <td>{{ (item['credit'] - item['totalCost'])/100  }}</td>
                 </tr>
             {% endfor %}
-            <tr>
-                <td>Total spent:</td>
-                <td>{{ totalCost }}</td>
-            </tr>
         </tbody>
     </table>
 </div>

@@ -19,15 +19,14 @@ class DefaultController extends Controller
         return $this->render('page/home.html.twig', array(
             'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
             'results'   => $results,
-            'totals'    => $totals,
-            'totalCost' => array_sum(array_column($totals, 'totalCost'))
+            'totals'    => $totals
         ));
     }
 
     /**
      * Get history of coffee consumption
      */
-    public function getHistory() {
+    private function getHistory() {
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
 
@@ -48,13 +47,13 @@ class DefaultController extends Controller
     /**
      * Get totals of coffee consumption
      */
-    public function getTotals() {
+    private function getTotals() {
         $em         = $this->getDoctrine()->getManager();
         $qb         = $em->createQueryBuilder();
         $fromDate   = $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'calculation_from'))[0]->getValue();
         $toDate     = $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'calculation_to'))[0]->getValue();
 
-        $qb->select('u.name', 'SUM(a.cost) as totalCost')
+        $qb->select('u.name', 'c.value as credit', 'SUM(a.cost) as totalCost')
             ->from('CupBundle\Entity\Cup', 'a')
             ->leftJoin(
                 'UserBundle\Entity\User',
@@ -62,10 +61,16 @@ class DefaultController extends Controller
                 \Doctrine\ORM\Query\Expr\Join::WITH,
                 'a.user_id = u.id'
             )
+            ->leftJoin(
+                'UserBundle\Entity\Credit',
+                'c',
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                'c.userId = u.id'
+            )
             ->where('a.create_date > :from_date AND a.create_date < :to_date')
             ->setParameters(array('to_date' => $toDate, 'from_date' => $fromDate))
             ->groupBy('u.name')
-            ->orderBy('totalCost', 'DESC');
+            ->orderBy('u.name', 'DESC');
 
 
         return $qb->getQuery()->getResult();

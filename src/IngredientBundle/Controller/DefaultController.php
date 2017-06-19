@@ -33,13 +33,14 @@ class DefaultController extends Controller
 
             $ingredient->setName($data->getName());
             $ingredient->setCost($data->getCost());
+            $ingredient->setIsActive($data->getIsActive());
 
             $em = $this->getDoctrine()->getManager();
 
             $em->persist($ingredient);
             $em->flush();
 
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('ingredient_list');
         }
 
         return $this->render('IngredientBundle:Default:add/ingredient.html.twig', array(
@@ -69,6 +70,7 @@ class DefaultController extends Controller
 
             $ingredient->setName($data['name']);
             $ingredient->setCost($data['cost']);
+            $ingredient->setIsActive($data['status']);
 
             $em->flush();
 

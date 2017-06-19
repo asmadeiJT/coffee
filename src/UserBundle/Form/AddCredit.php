@@ -21,8 +21,6 @@ class AddCredit extends AbstractType
                 'class'=>'UserBundle\Entity\User',
                 'query_builder'=> function(EntityRepository $er){
                     return $er->createQueryBuilder('c')
-                        ->where('c.type = :buyer')
-                        ->setParameter(':buyer', 'buyer')
                         ->orderBy('c.name','ASC');},
                 'choice_label' => 'name'
             ))

@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class EditIngredient extends AbstractType
@@ -20,6 +21,13 @@ class EditIngredient extends AbstractType
             ))
             ->add('cost', IntegerType::class, array(
                 'label' => 'Cost'
+            ))
+            ->add('status', ChoiceType::class, array(
+                'label' => 'Status',
+                'choices' => array(
+                    1 => 'Enable',
+                    0 => 'Disable',
+                )
             ))
             ->add('submit', SubmitType::class, array(
                 'label' => 'Edit ingredient',

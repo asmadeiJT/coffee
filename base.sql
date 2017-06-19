@@ -30,11 +30,15 @@ CREATE TABLE IF NOT EXISTS `migration_versions` (
   PRIMARY KEY (`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table symfony.migration_versions: ~0 rows (approximately)
+-- Dumping data for table symfony.migration_versions: ~4 rows (approximately)
 DELETE FROM `migration_versions`;
 /*!40000 ALTER TABLE `migration_versions` DISABLE KEYS */;
 INSERT INTO `migration_versions` (`version`) VALUES
-	('20170606083420');
+	('20170603180917'),
+	('20170603190823'),
+	('20170607191814'),
+	('20170607192009'),
+	('20170608073128');
 /*!40000 ALTER TABLE `migration_versions` ENABLE KEYS */;
 
 
@@ -46,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table symfony.settings: ~2 rows (approximately)
+-- Dumping data for table symfony.settings: ~0 rows (approximately)
 DELETE FROM `settings`;
 /*!40000 ALTER TABLE `settings` DISABLE KEYS */;
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES
@@ -59,21 +63,23 @@ INSERT INTO `settings` (`id`, `name`, `value`) VALUES
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'owner',
+  `amortization` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table symfony.users: ~8 rows (approximately)
+-- Dumping data for table symfony.users: ~0 rows (approximately)
 DELETE FROM `users`;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`id`, `name`) VALUES
-	(1, 'Vasiliy'),
-	(2, 'Stepan'),
-	(3, 'Max'),
-	(4, 'Yury'),
-	(5, 'Vitaly'),
-	(6, 'Evgeny_S'),
-	(7, 'Evgeny_N'),
-	(8, 'Vlad');
+INSERT INTO `users` (`id`, `name`, `type`, `amortization`) VALUES
+	(1, 'Vasiliy', 'owner', 0),
+	(2, 'Stepan', 'owner', 0),
+	(3, 'Max', 'owner', 0),
+	(4, 'Yury', 'owner', 0),
+	(5, 'Vitaly', 'owner', 0),
+	(6, 'Evgeny_S', 'owner', 0),
+	(7, 'Evgeny_N', 'owner', 0),
+	(8, 'Vlad', 'buyer', 0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 
@@ -84,9 +90,9 @@ CREATE TABLE IF NOT EXISTS `сoffee_consumption` (
   `cost` int(11) NOT NULL,
   `create_date` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=242 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=262 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table symfony.сoffee_consumption: ~199 rows (approximately)
+-- Dumping data for table symfony.сoffee_consumption: ~0 rows (approximately)
 DELETE FROM `сoffee_consumption`;
 /*!40000 ALTER TABLE `сoffee_consumption` DISABLE KEYS */;
 INSERT INTO `сoffee_consumption` (`id`, `user_id`, `cost`, `create_date`) VALUES
@@ -312,7 +318,27 @@ INSERT INTO `сoffee_consumption` (`id`, `user_id`, `cost`, `create_date`) VALUE
 	(238, 3, 28, '2017-06-07 17:49:56'),
 	(239, 2, 28, '2017-06-08 10:01:32'),
 	(240, 4, 28, '2017-06-08 10:01:39'),
-	(241, 1, 28, '2017-06-08 10:01:42');
+	(241, 1, 28, '2017-06-08 10:01:42'),
+	(242, 6, 28, '2017-06-08 11:01:46'),
+	(243, 1, 28, '2017-06-08 11:12:29'),
+	(244, 2, 28, '2017-06-08 12:59:58'),
+	(245, 7, 28, '2017-06-08 13:06:03'),
+	(246, 5, 28, '2017-06-08 15:32:31'),
+	(247, 1, 28, '2017-06-08 15:33:28'),
+	(248, 8, 28, '2017-06-08 15:38:06'),
+	(249, 3, 28, '2017-06-09 10:15:33'),
+	(250, 5, 28, '2017-06-09 10:15:39'),
+	(251, 4, 28, '2017-06-09 10:16:11'),
+	(252, 1, 28, '2017-06-09 10:16:26'),
+	(253, 6, 28, '2017-06-09 10:16:40'),
+	(254, 1, 28, '2017-06-09 12:35:32'),
+	(255, 3, 28, '2017-06-09 12:41:19'),
+	(256, 1, 28, '2017-06-09 14:27:18'),
+	(257, 4, 28, '2017-06-09 14:27:22'),
+	(258, 7, 28, '2017-06-09 15:07:26'),
+	(259, 6, 28, '2017-06-09 15:07:30'),
+	(260, 5, 28, '2017-06-09 16:45:28'),
+	(261, 3, 28, '2017-06-09 16:52:03');
 /*!40000 ALTER TABLE `сoffee_consumption` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

@@ -37,17 +37,6 @@ class DefaultController extends Controller
 
             if ($userType == 'buyer') {
                 $cost = $cost + $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'amortization'))[0]->getValue();
-                $credit = array_shift($em->getRepository('UserBundle:Credit')->findBy(array('userId' => $user->getId())));
-                $creditAmount = $credit->getValue();
-                $resultCreditAmount = $creditAmount - $cost;
-
-                if ($resultCreditAmount < 0) {
-                    return $this->redirectToRoute('add_user_credit');
-                }
-
-                $credit->setValue($resultCreditAmount);
-                $em->persist($credit);
-                $em->flush();
             }
 
             $cup->setCost($cost);

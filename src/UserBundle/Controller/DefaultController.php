@@ -69,7 +69,7 @@ class DefaultController extends Controller
             }
             $em->flush();
 
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('credit_list');
         }
 
         return $this->render('UserBundle:Default:add/credit.html.twig', array(
