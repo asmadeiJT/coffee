@@ -51,8 +51,8 @@ class DefaultController extends Controller
     public function getTotals() {
         $em         = $this->getDoctrine()->getManager();
         $qb         = $em->createQueryBuilder();
-        $fromDate   = $this->getSettingByName('calculation_from')[0]['value'];
-        $toDate     = $this->getSettingByName('calculation_to')[0]['value'];
+        $fromDate   = $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'calculation_from'))[0]->getValue();
+        $toDate     = $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'calculation_to'))[0]->getValue();
 
         $qb->select('u.name', 'SUM(a.cost) as totalCost')
             ->from('CupBundle\Entity\Cup', 'a')
@@ -67,18 +67,6 @@ class DefaultController extends Controller
             ->groupBy('u.name')
             ->orderBy('totalCost', 'DESC');
 
-
-        return $qb->getQuery()->getResult();
-    }
-
-    public function getSettingByName($name) {
-        $em = $this->getDoctrine()->getManager();
-        $qb = $em->createQueryBuilder();
-
-        $qb->select('s.value')
-            ->from('SettingsBundle\Entity\Settings', 's')
-            ->where('s.name = :name')
-            ->setParameter('name', $name);
 
         return $qb->getQuery()->getResult();
     }

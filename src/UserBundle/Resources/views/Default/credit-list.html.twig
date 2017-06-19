@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Settings List{% endblock %}
+
+{% block body %}
+    <div class="container popover-content">
+        <div class="row">
+            <div class="col-6 col-md-6">
+                <div>
+                    <h2>Credit List</h2>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <td>User</td>
+                            <td>Value</td>
+                            <td>Action</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in results %}
+                            <tr>
+                                <td>{{ item['name'] }}</td>
+                                <td>{{ item['value'] }}</td>
+                                <td><a href="{{ path('edit_setting', {'id': item['id']}) }}">Add</a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

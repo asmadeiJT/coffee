@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ingredients List{% endblock %}
+
+{% block body %}
+    <div class="container popover-content">
+        <div class="row">
+            <div class="col-6 col-md-6">
+                <div>
+                    <h2>Ingredients List</h2>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>Cost</td>
+                            <td>Action</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in results %}
+                            <tr>
+                                <td>{{ item['name'] }}</td>
+                                <td>{{ item['cost'] }}</td>
+                                <td><a href="{{ path('edit_ingredient', {'id': item['id']}) }}" onclick="return confirm('Are u sure?')">Edit</a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

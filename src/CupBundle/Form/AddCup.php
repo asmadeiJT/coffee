@@ -13,7 +13,7 @@ class AddCup extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-            ->add('user_id', EntityType::class, array(
+            ->add('user', EntityType::class, array(
                 'label' => 'Coffee addict Name',
                 'class'=>'UserBundle\Entity\User',
                 'query_builder'=> function(EntityRepository $er){
@@ -27,7 +27,7 @@ class AddCup extends AbstractType
                     2 => 'Two',
                 )
             ))
-            ->add('user_id', EntityType::class, array(
+            ->add('ingredients', EntityType::class, array(
                 'label' => 'Ingredients',
                 'multiple' => true,
                 'class'=>'IngredientBundle\Entity\Ingredient',
@@ -35,12 +35,12 @@ class AddCup extends AbstractType
                     return $er->createQueryBuilder('c')
                         ->where('c.isActive = 1')
                         ->orderBy('c.name','ASC');},
-                'choice_label' => 'name'
+                'choice_label' => 'name',
+                'required' => false
             ))
             ->add('submit', SubmitType::class, array(
                 'label' => 'Add cup',
                 'attr'  => array('class' => 'btn btn-default pull-right')
             ));
     }
-
 }

@@ -3,7 +3,6 @@
 namespace CupBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use CupBundle\Entity\Cup;
@@ -20,16 +19,40 @@ class DefaultController extends Controller
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $cup  = new Cup();
+            $data       = $form->getData();
+            $cup        = new Cup();
+            $em         = $this->getDoctrine()->getManager();
+            $user       = $data['user'];
+            $userType   = $user->getType();
 
-            $cost = $data->getCost() * 28;
+            $beenCost = $data['choice'] * $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'been_cost'))[0]->getValue();
+            $ingredients = $data['ingredients'];
+            $ingredientsCost = 0;
+
+            foreach ($ingredients as $ingredient) {
+                $ingredientsCost = $ingredientsCost + $ingredient->getCost();
+            }
+
+            $cost = $beenCost + $ingredientsCost;
+
+            if ($userType == 'buyer') {
+                $cost = $cost + $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'amortization'))[0]->getValue();
+                $credit = array_shift($em->getRepository('UserBundle:Credit')->findBy(array('userId' => $user->getId())));
+                $creditAmount = $credit->getValue();
+                $resultCreditAmount = $creditAmount - $cost;
+
+                if ($resultCreditAmount < 0) {
+                    return $this->redirectToRoute('add_user_credit');
+                }
+
+                $credit->setValue($resultCreditAmount);
+                $em->persist($credit);
+                $em->flush();
+            }
+
             $cup->setCost($cost);
-            $cup->setUserId($data->getUserId()->getId());
+            $cup->setUserId($user->getId());
             $cup->setCreateDate(new \DateTime());
-
-            $em = $this->getDoctrine()->getManager();
-
             $em->persist($cup);
             $em->flush();
 

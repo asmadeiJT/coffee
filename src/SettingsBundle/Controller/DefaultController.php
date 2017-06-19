@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use SettingsBundle\Entity\Settings;
 use SettingsBundle\Form\AddSettings;
+use SettingsBundle\Form\EditSettings;
 
 class DefaultController extends Controller
 {
@@ -38,12 +39,66 @@ class DefaultController extends Controller
             $em->persist($setting);
             $em->flush();
 
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('setting_list');
         }
 
-        return $this->render('IngredientBundle:Default:add/ingredient.html.twig', array(
+        return $this->render('SettingsBundle:Default:add/settings.html.twig', array(
             'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
             'form'      => $formView
+        ));
+    }
+
+    /**
+     * @Route("/settings/edit", name="edit_setting")
+     */
+    public function editAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $id = $request->get('id');
+        $setting = $em->getRepository('SettingsBundle:Settings')->find($id);
+        $form = $this->createForm(EditSettings::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            if (!$setting) {
+                throw $this->createNotFoundException(
+                    'No setting found for id '.$id
+                );
+            }
+
+            $setting->setName($data['name']);
+            $setting->setValue($data['value']);
+
+            $em->flush();
+
+            return $this->redirectToRoute('setting_list');
+        }
+
+        $form->get('name')->setData($setting->getName());
+        $form->get('value')->setData($setting->getValue());
+
+        $formView = $form->createView();
+
+        return $this->render('SettingsBundle:Default:edit/settings.html.twig', array(
+            'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+            'form'      => $formView
+        ));
+    }
+
+    /**
+     * @Route("/settings/list", name="setting_list")
+     */
+    public function listAction() {
+        $em = $this->getDoctrine()->getManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb->select('a.id, a.name, a.value')
+            ->from('SettingsBundle\Entity\Settings', 'a');
+
+        return $this->render('SettingsBundle:Default:list.html.twig', array(
+            'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+            'results'   => $qb->getQuery()->getResult()
         ));
     }
 }
