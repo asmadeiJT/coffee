@@ -15,12 +15,17 @@ CREATE TABLE IF NOT EXISTS `ingredients` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `cost` int(11) NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table symfony.ingredients: ~0 rows (approximately)
+-- Dumping data for table symfony.ingredients: ~2 rows (approximately)
 DELETE FROM `ingredients`;
 /*!40000 ALTER TABLE `ingredients` DISABLE KEYS */;
+INSERT INTO `ingredients` (`id`, `name`, `cost`, `is_active`) VALUES
+	(1, 'milk', 20, 1),
+	(2, 'lid', 10, 1),
+	(3, 'cup', 10, 1);
 /*!40000 ALTER TABLE `ingredients` ENABLE KEYS */;
 
 
@@ -30,7 +35,7 @@ CREATE TABLE IF NOT EXISTS `migration_versions` (
   PRIMARY KEY (`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table symfony.migration_versions: ~4 rows (approximately)
+-- Dumping data for table symfony.migration_versions: ~7 rows (approximately)
 DELETE FROM `migration_versions`;
 /*!40000 ALTER TABLE `migration_versions` DISABLE KEYS */;
 INSERT INTO `migration_versions` (`version`) VALUES
@@ -38,7 +43,9 @@ INSERT INTO `migration_versions` (`version`) VALUES
 	('20170603190823'),
 	('20170607191814'),
 	('20170607192009'),
-	('20170608073128');
+	('20170608073128'),
+	('20170609201921'),
+	('20170610092027');
 /*!40000 ALTER TABLE `migration_versions` ENABLE KEYS */;
 
 
@@ -48,14 +55,16 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table symfony.settings: ~0 rows (approximately)
+-- Dumping data for table symfony.settings: ~4 rows (approximately)
 DELETE FROM `settings`;
 /*!40000 ALTER TABLE `settings` DISABLE KEYS */;
 INSERT INTO `settings` (`id`, `name`, `value`) VALUES
 	(1, 'calculation_from', '2017-06-06 12:29:37'),
-	(2, 'calculation_to', '2017-08-08 12:29:37');
+	(2, 'calculation_to', '2017-08-08 12:29:37'),
+	(3, 'amortization', '35'),
+	(4, 'been_cost', '28');
 /*!40000 ALTER TABLE `settings` ENABLE KEYS */;
 
 
@@ -68,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table symfony.users: ~0 rows (approximately)
+-- Dumping data for table symfony.users: ~8 rows (approximately)
 DELETE FROM `users`;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `name`, `type`, `amortization`) VALUES
@@ -83,6 +92,29 @@ INSERT INTO `users` (`id`, `name`, `type`, `amortization`) VALUES
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 
+-- Dumping structure for table symfony.user_credit
+CREATE TABLE IF NOT EXISTS `user_credit` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `value` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- Dumping data for table symfony.user_credit: ~8 rows (approximately)
+DELETE FROM `user_credit`;
+/*!40000 ALTER TABLE `user_credit` DISABLE KEYS */;
+INSERT INTO `user_credit` (`id`, `user_id`, `value`) VALUES
+	(1, 8, 2800),
+	(2, 7, 0),
+	(3, 6, 0),
+	(4, 1, -100),
+	(5, 3, -16),
+	(6, 5, -128),
+	(7, 4, -28),
+	(8, 2, -1);
+/*!40000 ALTER TABLE `user_credit` ENABLE KEYS */;
+
+
 -- Dumping structure for table symfony.сoffee_consumption
 CREATE TABLE IF NOT EXISTS `сoffee_consumption` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -90,9 +122,9 @@ CREATE TABLE IF NOT EXISTS `сoffee_consumption` (
   `cost` int(11) NOT NULL,
   `create_date` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=262 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=324 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table symfony.сoffee_consumption: ~0 rows (approximately)
+-- Dumping data for table symfony.сoffee_consumption: ~284 rows (approximately)
 DELETE FROM `сoffee_consumption`;
 /*!40000 ALTER TABLE `сoffee_consumption` DISABLE KEYS */;
 INSERT INTO `сoffee_consumption` (`id`, `user_id`, `cost`, `create_date`) VALUES
@@ -338,7 +370,67 @@ INSERT INTO `сoffee_consumption` (`id`, `user_id`, `cost`, `create_date`) VALUE
 	(258, 7, 28, '2017-06-09 15:07:26'),
 	(259, 6, 28, '2017-06-09 15:07:30'),
 	(260, 5, 28, '2017-06-09 16:45:28'),
-	(261, 3, 28, '2017-06-09 16:52:03');
+	(261, 3, 28, '2017-06-09 16:52:03'),
+	(262, 1, 28, '2017-06-19 11:35:34'),
+	(263, 6, 28, '2017-06-19 11:38:29'),
+	(264, 4, 28, '2017-06-19 11:38:43'),
+	(265, 1, 28, '2017-06-19 11:38:59'),
+	(266, 3, 28, '2017-06-19 11:39:07'),
+	(267, 8, 63, '2017-06-19 11:41:20'),
+	(268, 8, 63, '2017-06-19 11:41:28'),
+	(269, 8, 63, '2017-06-19 11:41:35'),
+	(270, 8, 63, '2017-06-19 11:41:40'),
+	(271, 8, 63, '2017-06-19 11:41:46'),
+	(272, 8, 63, '2017-06-19 12:20:14'),
+	(273, 8, 85, '2017-06-19 12:20:23'),
+	(274, 8, 83, '2017-06-19 12:21:22'),
+	(275, 8, 83, '2017-06-19 12:21:30'),
+	(276, 2, 28, '2017-06-19 12:21:55'),
+	(277, 2, 28, '2017-06-19 12:22:01'),
+	(278, 2, 56, '2017-06-19 12:22:07'),
+	(279, 2, 56, '2017-06-19 12:22:19'),
+	(280, 2, 56, '2017-06-19 12:22:28'),
+	(281, 4, 56, '2017-06-19 12:22:46'),
+	(282, 4, 56, '2017-06-19 12:22:52'),
+	(283, 4, 56, '2017-06-19 12:23:00'),
+	(284, 4, 56, '2017-06-19 12:23:06'),
+	(285, 4, 28, '2017-06-19 12:23:24'),
+	(286, 5, 28, '2017-06-19 12:24:27'),
+	(287, 5, 56, '2017-06-19 12:24:33'),
+	(288, 5, 56, '2017-06-19 12:24:39'),
+	(289, 5, 56, '2017-06-19 12:24:51'),
+	(290, 3, 56, '2017-06-19 12:25:05'),
+	(291, 3, 56, '2017-06-19 12:25:11'),
+	(292, 3, 56, '2017-06-19 12:25:17'),
+	(293, 3, 56, '2017-06-19 12:25:23'),
+	(294, 3, 56, '2017-06-19 12:25:30'),
+	(295, 6, 56, '2017-06-19 12:25:47'),
+	(296, 6, 56, '2017-06-19 12:25:54'),
+	(297, 6, 56, '2017-06-19 12:26:00'),
+	(298, 6, 56, '2017-06-19 12:26:06'),
+	(299, 6, 56, '2017-06-19 12:26:18'),
+	(300, 6, 56, '2017-06-19 12:26:23'),
+	(301, 1, 28, '2017-06-19 12:27:30'),
+	(302, 1, 56, '2017-06-19 12:27:38'),
+	(303, 1, 56, '2017-06-19 12:27:45'),
+	(304, 1, 56, '2017-06-19 12:28:05'),
+	(305, 1, 56, '2017-06-19 12:28:35'),
+	(306, 1, 56, '2017-06-19 12:28:42'),
+	(307, 1, 56, '2017-06-19 12:28:49'),
+	(308, 1, 56, '2017-06-19 12:28:57'),
+	(309, 6, 28, '2017-06-19 14:19:41'),
+	(310, 3, 28, '2017-06-19 14:19:48'),
+	(311, 2, 28, '2017-06-19 14:19:55'),
+	(313, 7, 48, '2017-06-19 14:22:04'),
+	(314, 6, 28, '2017-06-19 17:53:21'),
+	(315, 1, 28, '2017-06-19 17:54:55'),
+	(316, 2, 28, '2017-06-19 18:01:22'),
+	(317, 1, 28, '2017-06-20 10:43:06'),
+	(318, 6, 28, '2017-06-20 10:43:13'),
+	(319, 3, 28, '2017-06-20 10:43:24'),
+	(320, 1, 28, '2017-06-20 10:58:39'),
+	(322, 7, 48, '2017-06-20 11:21:54'),
+	(323, 4, 28, '2017-06-20 11:55:05');
 /*!40000 ALTER TABLE `сoffee_consumption` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
