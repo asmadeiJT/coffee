@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'owner',
   `amortization` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Dumping data for table symfony.users: ~8 rows (approximately)
 DELETE FROM `users`;
@@ -88,7 +88,8 @@ INSERT INTO `users` (`id`, `name`, `type`, `amortization`) VALUES
 	(5, 'Vitaly', 'owner', 0),
 	(6, 'Evgeny_S', 'owner', 0),
 	(7, 'Evgeny_N', 'owner', 0),
-	(8, 'Vlad', 'buyer', 0);
+	(8, 'Vlad', 'buyer', 0),
+	(9, 'Vika', 'buyer', 0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 
@@ -98,20 +99,21 @@ CREATE TABLE IF NOT EXISTS `user_credit` (
   `user_id` int(11) NOT NULL,
   `value` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- Dumping data for table symfony.user_credit: ~8 rows (approximately)
 DELETE FROM `user_credit`;
 /*!40000 ALTER TABLE `user_credit` DISABLE KEYS */;
 INSERT INTO `user_credit` (`id`, `user_id`, `value`) VALUES
-	(1, 8, 2800),
-	(2, 7, 0),
-	(3, 6, 0),
-	(4, 1, -100),
-	(5, 3, -16),
-	(6, 5, -128),
-	(7, 4, -28),
-	(8, 2, -1);
+	(1, 8, 1878),
+	(2, 7, -228),
+	(3, 6, -756),
+	(4, 1, -1108),
+	(5, 3, -716),
+	(6, 5, -604),
+	(7, 4, -588),
+	(8, 2, -505),
+	(9, 9, 127);
 /*!40000 ALTER TABLE `user_credit` ENABLE KEYS */;
 
 
@@ -122,9 +124,9 @@ CREATE TABLE IF NOT EXISTS `сoffee_consumption` (
   `cost` int(11) NOT NULL,
   `create_date` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=324 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=359 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Dumping data for table symfony.сoffee_consumption: ~284 rows (approximately)
+-- Dumping data for table symfony.сoffee_consumption: ~286 rows (approximately)
 DELETE FROM `сoffee_consumption`;
 /*!40000 ALTER TABLE `сoffee_consumption` DISABLE KEYS */;
 INSERT INTO `сoffee_consumption` (`id`, `user_id`, `cost`, `create_date`) VALUES
@@ -430,7 +432,37 @@ INSERT INTO `сoffee_consumption` (`id`, `user_id`, `cost`, `create_date`) VALUE
 	(319, 3, 28, '2017-06-20 10:43:24'),
 	(320, 1, 28, '2017-06-20 10:58:39'),
 	(322, 7, 48, '2017-06-20 11:21:54'),
-	(323, 4, 28, '2017-06-20 11:55:05');
+	(323, 4, 28, '2017-06-20 11:55:05'),
+	(325, 2, 28, '2017-06-20 12:51:41'),
+	(327, 8, 63, '2017-06-20 12:53:38'),
+	(328, 5, 28, '2017-06-20 15:29:48'),
+	(329, 3, 28, '2017-06-20 15:29:59'),
+	(330, 8, 63, '2017-06-20 15:30:18'),
+	(331, 6, 28, '2017-06-20 15:30:38'),
+	(332, 4, 28, '2017-06-21 10:21:01'),
+	(333, 1, 28, '2017-06-21 10:21:07'),
+	(334, 3, 28, '2017-06-21 10:21:14'),
+	(335, 6, 28, '2017-06-21 10:21:20'),
+	(336, 1, 28, '2017-06-21 10:24:53'),
+	(337, 4, 28, '2017-06-21 12:59:54'),
+	(338, 1, 28, '2017-06-21 13:00:01'),
+	(339, 5, 56, '2017-06-21 13:25:42'),
+	(340, 2, 28, '2017-06-21 15:31:11'),
+	(343, 7, 48, '2017-06-21 15:31:28'),
+	(344, 6, 28, '2017-06-21 15:31:39'),
+	(345, 8, 83, '2017-06-21 15:32:02'),
+	(346, 4, 28, '2017-06-21 15:49:33'),
+	(347, 1, 28, '2017-06-21 15:49:40'),
+	(349, 2, 28, '2017-06-22 10:43:40'),
+	(350, 3, 28, '2017-06-22 10:43:50'),
+	(351, 6, 28, '2017-06-22 10:43:56'),
+	(352, 1, 28, '2017-06-22 10:44:05'),
+	(353, 9, 83, '2017-06-22 13:59:10'),
+	(354, 5, 28, '2017-06-22 14:01:23'),
+	(355, 6, 28, '2017-06-22 14:01:31'),
+	(356, 4, 28, '2017-06-22 14:01:39'),
+	(357, 6, 28, '2017-06-22 14:24:39'),
+	(358, 3, 28, '2017-06-22 14:24:44');
 /*!40000 ALTER TABLE `сoffee_consumption` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;

@@ -39,6 +39,14 @@ class DefaultController extends Controller
                 $cost = $cost + $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'amortization'))[0]->getValue();
             }
 
+            $credit = array_shift($em->getRepository('UserBundle:Credit')->findBy(array('userId' => $user->getId())));
+            $creditAmount = $credit->getValue();
+            $resultCreditAmount = $creditAmount - $cost;
+
+            $credit->setValue($resultCreditAmount);
+            $em->persist($credit);
+            $em->flush();
+
             $cup->setCost($cost);
             $cup->setUserId($user->getId());
             $cup->setCreateDate(new \DateTime());
@@ -65,6 +73,14 @@ class DefaultController extends Controller
         if (!$cup) {
             throw $this->createNotFoundException('No guest found');
         }
+
+        $credit = array_shift($em->getRepository('UserBundle:Credit')->findBy(array('userId' => $cup->getUserId())));
+        $creditAmount = $credit->getValue();
+        $resultCreditAmount = $creditAmount + $cup->getCost();
+
+        $credit->setValue($resultCreditAmount);
+        $em->persist($credit);
+        $em->flush();
 
         $em->remove($cup);
         $em->flush();

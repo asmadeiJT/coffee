@@ -72,6 +72,7 @@ class DefaultController extends Controller
             $ingredient->setCost($data['cost']);
             $ingredient->setIsActive($data['status']);
 
+            $em->persist($ingredient);
             $em->flush();
 
             return $this->redirectToRoute('ingredient_list');

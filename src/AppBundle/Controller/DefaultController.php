@@ -50,25 +50,15 @@ class DefaultController extends Controller
     private function getTotals() {
         $em         = $this->getDoctrine()->getManager();
         $qb         = $em->createQueryBuilder();
-        $fromDate   = $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'calculation_from'))[0]->getValue();
-        $toDate     = $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'calculation_to'))[0]->getValue();
 
-        $qb->select('u.name', 'c.value as credit', 'SUM(a.cost) as totalCost')
-            ->from('CupBundle\Entity\Cup', 'a')
-            ->leftJoin(
-                'UserBundle\Entity\User',
-                'u',
-                \Doctrine\ORM\Query\Expr\Join::WITH,
-                'a.user_id = u.id'
-            )
+        $qb->select('u.name', 'c.value as credit')
+            ->from('UserBundle\Entity\User', 'u')
             ->leftJoin(
                 'UserBundle\Entity\Credit',
                 'c',
                 \Doctrine\ORM\Query\Expr\Join::WITH,
                 'c.userId = u.id'
             )
-            ->where('a.create_date > :from_date AND a.create_date < :to_date')
-            ->setParameters(array('to_date' => $toDate, 'from_date' => $fromDate))
             ->groupBy('u.name')
             ->orderBy('u.name', 'DESC');
 
