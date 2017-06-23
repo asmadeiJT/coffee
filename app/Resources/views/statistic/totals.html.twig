@@ -9,7 +9,7 @@
         </thead>
         <tbody>
             {% for item in totals %}
-                <tr>
+                <tr class="{% if item['credit'] > 0 %} success {% else %} danger {% endif %}">
                     <td><a href="{{ path('user_info', {'id': item['id']}) }}">{{ item['name'] }}</a></td>
                     <td>{{ item['credit']/100  }} р.</td>
                 </tr>
