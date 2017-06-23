@@ -18,6 +18,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
+            new Ob\HighchartsBundle\ObHighchartsBundle(),
             new AppBundle\AppBundle(),
             new UserBundle\UserBundle(),
             new CupBundle\CupBundle(),

@@ -10,8 +10,8 @@
         <tbody>
             {% for item in totals %}
                 <tr>
-                    <td>{{ item['name'] }}</td>
-                    <td>{{ item['credit']/100  }}</td>
+                    <td><a href="{{ path('user_info', {'id': item['id']}) }}">{{ item['name'] }}</a></td>
+                    <td>{{ item['credit']/100  }} р.</td>
                 </tr>
             {% endfor %}
         </tbody>

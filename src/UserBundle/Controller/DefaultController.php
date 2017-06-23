@@ -9,20 +9,22 @@ use UserBundle\Entity\User;
 use UserBundle\Entity\Credit;
 use UserBundle\Form\AddUser;
 use UserBundle\Form\AddCredit;
+use Ob\HighchartsBundle\Highcharts\Highchart;
 
 class DefaultController extends Controller
 {
     /**
      * @Route("/user/add", name="add_user")
      */
-    public function addAction(Request $request) {
+    public function addUserAction(Request $request) {
         $user = new User();
-        $form = $this->createForm(AddUser::class, $user);
-        $formView = $form->createView();
+        $credit = new Credit();
+        $userForm = $this->createForm(AddUser::class, $user);
+        $formView = $userForm->createView();
 
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
+        $userForm->handleRequest($request);
+        if ($userForm->isSubmitted() && $userForm->isValid()) {
+            $data = $userForm->getData();
 
             $user->setName($data->getName());
             $user->setType($data->getType());
@@ -31,6 +33,12 @@ class DefaultController extends Controller
             $em = $this->getDoctrine()->getManager();
 
             $em->persist($user);
+            $em->flush();
+
+            $credit->setUserId($user->getId());
+            $credit->setValue(0);
+
+            $em->persist($credit);
             $em->flush();
 
             return $this->redirectToRoute('homepage');
@@ -97,6 +105,59 @@ class DefaultController extends Controller
         return $this->render('UserBundle:Default:credit-list.html.twig', array(
             'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
             'results'   => $qb->getQuery()->getResult()
+        ));
+    }
+
+    /**
+     * @Route("/user/info", name="user_info")
+     */
+    public function userInfoAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $id = $request->get('id');
+        $user = $em->getRepository('UserBundle:User')->find($id);
+        $qb = $em->createQueryBuilder();
+
+        $qb->select('c')
+            ->from('CupBundle\Entity\Cup', 'c')
+            ->where('c.user_id = :userId AND c.create_date >= :date')
+            ->setParameters(array('userId' => $id, 'date' => new \DateTime('midnight first day of this month')));
+
+        $data = $qb->getQuery()->getResult();
+
+        $results = $yData = $xData = array();
+        foreach ($data as $cup) {
+            $date = $cup->getCreateDate();
+            $format = $date->format('m/d/Y');
+            $results[$format] += $cup->getCost()/100;
+        }
+
+        foreach ($results as $key => $value) {
+            $xData[] = $key;
+            $yData[] = $value;
+        }
+
+        $series = array(
+            array(
+                "data" => $yData,
+                "name" => $user->getName(),
+                'type' => 'line',
+            ),
+        );
+
+        $ob = new Highchart();
+        $ob->chart->renderTo('linechart');  // The #id of the div where to render the chart
+        $ob->title->text($user->getName() . ' Info');
+        $ob->xAxis->type('datetime');
+        $ob->xAxis->title(array('text' => "Date"));
+        $ob->xAxis->categories($xData);
+        $ob->yAxis->title(array('text' => "Money, rub"));
+        $ob->series($series);
+
+        return $this->render('UserBundle:Default:info.html.twig', array(
+            'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+            'results'   => $results,
+            'user' => $user,
+            'chart' => $ob
         ));
     }
 }

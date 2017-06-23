@@ -51,7 +51,7 @@ class DefaultController extends Controller
         $em         = $this->getDoctrine()->getManager();
         $qb         = $em->createQueryBuilder();
 
-        $qb->select('u.name', 'c.value as credit')
+        $qb->select('u.id', 'u.name', 'c.value as credit')
             ->from('UserBundle\Entity\User', 'u')
             ->leftJoin(
                 'UserBundle\Entity\Credit',
