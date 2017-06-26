@@ -18,7 +18,7 @@
                         </thead>
                         <tbody>
                         {% for item in results %}
-                            <tr class="{% if item['credit'] > 0 %} success {% else %} danger {% endif %}">
+                            <tr class="{% if item['value'] > 0 %} success {% else %} danger {% endif %}">
                                 <td>{{ item['name'] }}</td>
                                 <td>{{ item['value']/100 }} р.</td>
                                 <td><a href="{{ path('add_user_credit') }}">Add</a></td>
