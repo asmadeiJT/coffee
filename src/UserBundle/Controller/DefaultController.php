@@ -128,7 +128,11 @@ class DefaultController extends Controller
         foreach ($data as $cup) {
             $date = $cup->getCreateDate();
             $format = $date->format('m/d/Y');
-            $results[$format] += $cup->getCost()/100;
+            if (isset($results[$format])) {
+                $results[$format] += $cup->getCost()/100;
+            } else {
+                $results[$format] = $cup->getCost()/100;
+            }
         }
 
         foreach ($results as $key => $value) {
