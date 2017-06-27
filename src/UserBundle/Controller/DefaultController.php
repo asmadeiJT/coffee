@@ -77,6 +77,13 @@ class DefaultController extends Controller
             }
             $em->flush();
 
+            $currentBankCash = array_shift($em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'current_bank_cash')));
+            $currentBankCashValue = $currentBankCash->getValue() + $data->getValue();
+
+            $currentBankCash->setValue($currentBankCashValue);
+            $em->persist($currentBankCash);
+            $em->flush();
+
             return $this->redirectToRoute('credit_list');
         }
 

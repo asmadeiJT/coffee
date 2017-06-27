@@ -13,13 +13,25 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $results = $this->getHistory();
-        $totals = $this->getTotals();
+        $results    = $this->getHistory();
+        $totals     = $this->getTotals();
+        $em         = $this->getDoctrine()->getManager();
+        $totalSpent = $this->getTotalSpent();
+        $bankCash   = $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'current_bank_cash'))[0]->getValue();
+        $credit     = $this->getCredits();
+        $balance    = $bankCash - $credit;
+        $profit     = $this->getProfit($balance);
+
 
         return $this->render('page/home.html.twig', array(
-            'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-            'results'   => $results,
-            'totals'    => $totals
+            'base_dir'      => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+            'results'       => $results,
+            'totals'        => $totals,
+            'cups_count'    => $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'cups_count'))[0]->getValue(),
+            'total_spent'   => array_shift($totalSpent),
+            'credit'        => $credit,
+            'balance'       => $balance,
+            'profit'        => $profit
         ));
     }
 
@@ -48,8 +60,8 @@ class DefaultController extends Controller
      * Get totals of coffee consumption
      */
     private function getTotals() {
-        $em         = $this->getDoctrine()->getManager();
-        $qb         = $em->createQueryBuilder();
+        $em = $this->getDoctrine()->getManager();
+        $qb = $em->createQueryBuilder();
 
         $qb->select('u.id', 'u.name', 'c.value as credit')
             ->from('UserBundle\Entity\User', 'u')
@@ -64,5 +76,38 @@ class DefaultController extends Controller
 
 
         return $qb->getQuery()->getResult();
+    }
+
+    private function getTotalSpent() {
+        $em = $this->getDoctrine()->getManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb->select('SUM(c.cost) as totalSpent')
+            ->from('CupBundle\Entity\Cup', 'c');
+
+
+        return $qb->getQuery()->getResult();
+    }
+
+    private function getProfit($balance) {
+        $em                 = $this->getDoctrine()->getManager();
+        $fixedBankCash      = $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'fixed_bank_cash'));
+        $fixedBankCashValue = array_shift($fixedBankCash);
+
+        $profit = $balance - $fixedBankCashValue->getValue();
+
+        return $profit;
+    }
+
+    private function getCredits () {
+        $em = $this->getDoctrine()->getManager();
+        $qb = $em->createQueryBuilder();
+
+        $qb->select('SUM(c.value) as totalCredit')
+            ->from('UserBundle\Entity\Credit', 'c');
+
+        $result = $qb->getQuery()->getResult();
+
+        return $result[0]['totalCredit'];
     }
 }

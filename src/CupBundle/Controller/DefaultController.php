@@ -25,9 +25,11 @@ class DefaultController extends Controller
             $user       = $data['user'];
             $userType   = $user->getType();
 
-            $beenCost = $data['choice'] * $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'been_cost'))[0]->getValue();
-            $ingredients = $data['ingredients'];
-            $ingredientsCost = 0;
+            $beenCost           = $data['choice'] * $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'been_cost'))[0]->getValue();
+            $cupsCountSetting   = array_shift($em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'cups_count')));
+            $cupsCountValue     = $cupsCountSetting->getValue() + $data['choice'];
+            $ingredients        = $data['ingredients'];
+            $ingredientsCost    = 0;
 
             foreach ($ingredients as $ingredient) {
                 $ingredientsCost = $ingredientsCost + $ingredient->getCost();
@@ -42,6 +44,10 @@ class DefaultController extends Controller
             $credit = array_shift($em->getRepository('UserBundle:Credit')->findBy(array('userId' => $user->getId())));
             $creditAmount = $credit->getValue();
             $resultCreditAmount = $creditAmount - $cost;
+
+            $cupsCountSetting->setValue($cupsCountValue);
+            $em->persist($cupsCountSetting);
+            $em->flush();
 
             $credit->setValue($resultCreditAmount);
             $em->persist($credit);
