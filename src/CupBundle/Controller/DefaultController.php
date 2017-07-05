@@ -28,6 +28,7 @@ class DefaultController extends Controller
             $beenCost           = $data['choice'] * $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'been_cost'))[0]->getValue();
             $cupsCountSetting   = array_shift($em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'cups_count')));
             $cupsCountValue     = $cupsCountSetting->getValue() + $data['choice'];
+            $isLong             = $data['choice'] > 1 ? true : false;
             $ingredients        = $data['ingredients'];
             $ingredientsCost    = 0;
 
@@ -54,6 +55,7 @@ class DefaultController extends Controller
             $em->flush();
 
             $cup->setCost($cost);
+            $cup->setIsLong($isLong);
             $cup->setUserId($user->getId());
             $cup->setCreateDate(new \DateTime());
             $em->persist($cup);
@@ -83,6 +85,14 @@ class DefaultController extends Controller
         $credit = array_shift($em->getRepository('UserBundle:Credit')->findBy(array('userId' => $cup->getUserId())));
         $creditAmount = $credit->getValue();
         $resultCreditAmount = $creditAmount + $cup->getCost();
+        $currentCupCount = $cup->getIsLong() ? 2 : 1;
+
+        $cupsCountSetting   = array_shift($em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'cups_count')));
+        $cupsCountValue     = $cupsCountSetting->getValue() - $currentCupCount;
+
+        $cupsCountSetting->setValue($cupsCountValue);
+        $em->persist($cupsCountSetting);
+        $em->flush();
 
         $credit->setValue($resultCreditAmount);
         $em->persist($credit);

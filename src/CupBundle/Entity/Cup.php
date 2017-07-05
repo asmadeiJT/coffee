@@ -28,6 +28,11 @@ class Cup
     private $cost;
 
     /**
+     * @ORM\Column(type="boolean", options={"default" : 0})
+     */
+    private $isLong;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $create_date;
@@ -85,6 +90,30 @@ class Cup
     public function setCost($cost)
     {
         $this->cost = $cost;
+
+        return $this;
+    }
+
+    /**
+     * Get $isLong
+     *
+     * @return boolean
+     */
+    public function getIsLong()
+    {
+        return $this->isLong;
+    }
+
+    /**
+     * Set cost
+     *
+     * @param boolean $isLong
+     *
+     * @return Cup
+     */
+    public function setIsLong($isLong)
+    {
+        $this->isLong = $isLong;
 
         return $this;
     }
