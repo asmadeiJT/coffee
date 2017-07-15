@@ -42,15 +42,15 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
 
-        $qb->select('u.name', 'a.id', 'a.cost', 'a.create_date')
+        $qb->select('u.name', 'a.id', 'a.cost', 'a.createDate')
             ->from('CupBundle\Entity\Cup', 'a')
             ->leftJoin(
                 'UserBundle\Entity\User',
                 'u',
                 \Doctrine\ORM\Query\Expr\Join::WITH,
-                'a.user_id = u.id'
+                'a.userId = u.id'
             )
-            ->orderBy('a.create_date', 'DESC')
+            ->orderBy('a.createDate', 'DESC')
             ->setMaxResults(10);
 
         return $qb->getQuery()->getResult();

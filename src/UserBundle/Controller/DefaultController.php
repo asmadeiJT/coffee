@@ -126,7 +126,7 @@ class DefaultController extends Controller
 
         $qb->select('c')
             ->from('CupBundle\Entity\Cup', 'c')
-            ->where('c.user_id = :userId AND c.create_date >= :date')
+            ->where('c.user_id = :userId AND c.createDate >= :date')
             ->setParameters(array('userId' => $id, 'date' => new \DateTime('midnight first day of this month')));
 
         $data = $qb->getQuery()->getResult();

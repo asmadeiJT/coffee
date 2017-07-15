@@ -20,7 +20,7 @@ class Cup
     /**
      * @ORM\Column(type="integer")
      */
-    private $user_id;
+    private $userId;
 
     /**
      * @ORM\Column(type="integer")
@@ -35,7 +35,7 @@ class Cup
     /**
      * @ORM\Column(type="datetime")
      */
-    private $create_date;
+    private $createDate;
 
     /**
      * Get id
@@ -54,7 +54,7 @@ class Cup
      */
     public function getUserId()
     {
-        return $this->user_id;
+        return $this->userId;
     }
     /**
      * Set user id
@@ -65,7 +65,7 @@ class Cup
      */
     public function setUserId($userId)
     {
-        $this->user_id = $userId;
+        $this->userId = $userId;
 
         return $this;
     }
@@ -121,13 +121,13 @@ class Cup
     /**
      * Set CreateDate
      *
-     * @param string $create_date
+     * @param string $createDate
      *
      * @return Cup
      */
-    public function setCreateDate($create_date)
+    public function setCreateDate($createDate)
     {
-        $this->create_date = $create_date;
+        $this->createDate = $createDate;
 
         return $this;
     }
@@ -139,7 +139,7 @@ class Cup
      */
     public function getCreateDate()
     {
-        return $this->create_date;
+        return $this->createDate;
     }
 
 }
