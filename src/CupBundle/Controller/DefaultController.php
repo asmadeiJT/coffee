@@ -7,11 +7,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use CupBundle\Entity\Cup;
 use CupBundle\Form\AddCup;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class DefaultController extends Controller
 {
     /**
      * @Route("/cup/add", name="add_cup")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function addAction(Request $request) {
         $form     = $this->createForm(AddCup::class);
@@ -72,6 +74,7 @@ class DefaultController extends Controller
 
     /**
      * @Route("/cup/delete", name="delete_cup")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function deleteAction(Request $request) {
         $em     = $this->getDoctrine()->getManager();

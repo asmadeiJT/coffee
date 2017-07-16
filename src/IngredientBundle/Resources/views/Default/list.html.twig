@@ -13,7 +13,9 @@
                         <tr>
                             <td>Name</td>
                             <td>Cost</td>
-                            <td>Action</td>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <td>Action</td>
+                            {% endif %}
                         </tr>
                         </thead>
                         <tbody>
@@ -21,7 +23,9 @@
                             <tr>
                                 <td>{{ item['name'] }}</td>
                                 <td>{{ item['cost'] }}</td>
-                                <td><a href="{{ path('edit_ingredient', {'id': item['id']}) }}" onclick="return confirm('Are u sure?')">Edit</a></td>
+                                {% if is_granted('ROLE_ADMIN') %}
+                                    <td><a href="{{ path('edit_ingredient', {'id': item['id']}) }}" onclick="return confirm('Are u sure?')">Edit</a></td>
+                                {% endif %}
                             </tr>
                         {% endfor %}
                         </tbody>
