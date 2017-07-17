@@ -30,6 +30,12 @@
                         {% endfor %}
                         </tbody>
                     </table>
+                    {% if(amortization) %}
+                        <h3>Amortization: {{ amortization }}</h3>
+                    {% endif %}
+                    {% if(been_cost) %}
+                        <h3>Been cost: {{ been_cost }}</h3>
+                    {% endif %}
                 </div>
             </div>
         </div>
