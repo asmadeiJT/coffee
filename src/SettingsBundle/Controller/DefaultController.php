@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use SettingsBundle\Entity\Settings;
 use SettingsBundle\Form\AddSettings;
 use SettingsBundle\Form\EditSettings;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class DefaultController extends Controller
 {
@@ -21,6 +22,7 @@ class DefaultController extends Controller
 
     /**
      * @Route("/settings/add", name="add_setting")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function addAction(Request $request) {
         $setting = new Settings();
@@ -50,6 +52,7 @@ class DefaultController extends Controller
 
     /**
      * @Route("/settings/edit", name="edit_setting")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function editAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
