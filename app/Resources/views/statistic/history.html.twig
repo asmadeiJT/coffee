@@ -34,5 +34,7 @@
         <h2>Balance: {{ balance/100 }} р.</h2>
     {% endif %}
     <h2>Credit: {{ credit/100 }} р.</h2>
-    <h2>Profit: {{ profit/100 }} р.</h2>
+    {% if is_granted('ROLE_ADMIN') %}
+        <h2>Profit: {{ profit/100 }} р.</h2>
+    {% endif %}
 </div>

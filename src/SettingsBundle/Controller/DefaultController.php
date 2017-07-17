@@ -91,6 +91,7 @@ class DefaultController extends Controller
 
     /**
      * @Route("/settings/list", name="setting_list")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function listAction() {
         $em = $this->getDoctrine()->getManager();
