@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use IngredientBundle\Entity\Ingredient;
 use IngredientBundle\Form\AddIngredient;
 use IngredientBundle\Form\EditIngredient;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class DefaultController extends Controller
 {
@@ -21,6 +22,7 @@ class DefaultController extends Controller
 
     /**
      * @Route("/ingredient/add", name="add_ingredient")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function addAction(Request $request) {
         $ingredient = new Ingredient();
@@ -51,6 +53,7 @@ class DefaultController extends Controller
 
     /**
      * @Route("/ingredient/edit", name="edit_ingredient")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function editAction(Request $request) {
         $em = $this->getDoctrine()->getManager();

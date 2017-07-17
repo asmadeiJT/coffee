@@ -10,11 +10,13 @@ use UserBundle\Entity\Credit;
 use UserBundle\Form\AddUser;
 use UserBundle\Form\AddCredit;
 use Ob\HighchartsBundle\Highcharts\Highchart;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class DefaultController extends Controller
 {
     /**
      * @Route("/user/add", name="add_user")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function addUserAction(Request $request) {
         $user = new User();
@@ -52,6 +54,7 @@ class DefaultController extends Controller
 
     /**
      * @Route("/user/credit/add", name="add_user_credit")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function addUserCredit(Request $request) {
         $credit = new Credit();
@@ -95,6 +98,7 @@ class DefaultController extends Controller
 
     /**
      * @Route("/user/credit/list", name="credit_list")
+     * @Security("has_role('ROLE_ADMIN')")
      */
     public function creditListAction() {
         $em = $this->getDoctrine()->getManager();
@@ -126,7 +130,7 @@ class DefaultController extends Controller
 
         $qb->select('c')
             ->from('CupBundle\Entity\Cup', 'c')
-            ->where('c.user_id = :userId AND c.createDate >= :date')
+            ->where('c.userId = :userId AND c.createDate >= :date')
             ->setParameters(array('userId' => $id, 'date' => new \DateTime('midnight first day of this month')));
 
         $data = $qb->getQuery()->getResult();
