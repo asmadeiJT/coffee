@@ -95,16 +95,22 @@ class DefaultController extends Controller
     /**
      * @Route("/ingredient/list", name="ingredient_list")
      */
-    public function listAction() {
+    public function listAction()
+    {
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
+        $amortization = $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'amortization'))[0]->getValue();
+        $beenCost = $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'been_cost'))[0]->getValue();
+
 
         $qb->select('a.id, a.name, a.cost, a.isActive')
             ->from('IngredientBundle\Entity\Ingredient', 'a');
 
         return $this->render('IngredientBundle:Default:list.html.twig', array(
-            'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-            'results'   => $qb->getQuery()->getResult()
+            'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..') . DIRECTORY_SEPARATOR,
+            'results' => $qb->getQuery()->getResult(),
+            'amortization' => $amortization,
+            'been_cost' => $beenCost
         ));
     }
 }
