@@ -5,7 +5,7 @@ namespace CupBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="CupBundle\Repository\CupRepository")
  * @ORM\Table(name="сoffee_consumption")
  */
 class Cup
