@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Settings List{% endblock %}
+{% block title %}Credit List{% endblock %}
 
 {% block body %}
     <div class="container popover-content">
@@ -18,9 +18,9 @@
                         </thead>
                         <tbody>
                         {% for item in results %}
-                            <tr class="{% if item['value'] > 0 %} success {% else %} danger {% endif %}">
+                            <tr class="{% if item['credit'] > 0 %} success {% else %} danger {% endif %}">
                                 <td>{{ item['name'] }}</td>
-                                <td>{{ item['value']/100 }} р.</td>
+                                <td>{{ item['credit']/100 }} р.</td>
                                 <td><a href="{{ path('add_user_credit') }}">Add</a></td>
                             </tr>
                         {% endfor %}

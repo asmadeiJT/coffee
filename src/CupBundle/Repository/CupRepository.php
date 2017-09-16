@@ -6,8 +6,7 @@ use Doctrine\ORM\EntityRepository;
 
 class CupRepository extends EntityRepository
 {
-    public function findAllOrderedByName()
-    {
+    public function getLastCups() {
         return $this->getEntityManager()
             ->createQueryBuilder()
             ->select('u.name', 'a.id', 'a.cost', 'a.createDate')
@@ -19,7 +18,16 @@ class CupRepository extends EntityRepository
                 'a.userId = u.id'
             )
             ->orderBy('a.createDate', 'DESC')
-            ->setMaxResults(20);
+            ->setMaxResults(20)
+            ->getQuery()
             ->getResult();
+    }
+
+    public function getTotalSpent() {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT SUM(c.cost) as totalSpent FROM CupBundle\Entity\Cup c'
+            )
+            ->getSingleScalarResult();
     }
 }

@@ -18,7 +18,8 @@ class DefaultController extends Controller
      * @Route("/user/add", name="add_user")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function addUserAction(Request $request) {
+    public function addUserAction(Request $request)
+    {
         $user = new User();
         $credit = new Credit();
         $userForm = $this->createForm(AddUser::class, $user);
@@ -47,8 +48,8 @@ class DefaultController extends Controller
         }
 
         return $this->render('UserBundle:Default:add/user.html.twig', array(
-            'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-            'form'      => $formView
+            'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..') . DIRECTORY_SEPARATOR,
+            'form' => $formView
         ));
     }
 
@@ -56,19 +57,19 @@ class DefaultController extends Controller
      * @Route("/user/credit/add", name="add_user_credit")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function addUserCredit(Request $request) {
+    public function addUserCredit(Request $request)
+    {
         $credit = new Credit();
         $form = $this->createForm(AddCredit::class, $credit);
         $formView = $form->createView();
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em     = $this->getDoctrine()->getManager();
-            $data   = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $data = $form->getData();
             $userId = $data->getUserId()->getId();
-            $userCredit = $em->getRepository('UserBundle:Credit')->findBy(array('userId' => $userId));
-            if (isset($userCredit[0])) {
-                $userCredit = $userCredit[0];
+            $userCredit = $em->getRepository('UserBundle:Credit')->findOneBy(array('userId' => $userId));
+            if ($userCredit) {
                 $value = $userCredit->getValue() + $data->getValue();
                 $userCredit->setUserId($userId);
                 $userCredit->setValue($value);
@@ -80,7 +81,7 @@ class DefaultController extends Controller
             }
             $em->flush();
 
-            $currentBankCash = array_shift($em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'current_bank_cash')));
+            $currentBankCash = $em->getRepository('SettingsBundle:Settings')->findOneBy(array('name' => 'current_bank_cash'));
             $currentBankCashValue = $currentBankCash->getValue() + $data->getValue();
 
             $currentBankCash->setValue($currentBankCashValue);
@@ -91,8 +92,8 @@ class DefaultController extends Controller
         }
 
         return $this->render('UserBundle:Default:add/credit.html.twig', array(
-            'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-            'form'      => $formView
+            'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..') . DIRECTORY_SEPARATOR,
+            'form' => $formView
         ));
     }
 
@@ -100,53 +101,30 @@ class DefaultController extends Controller
      * @Route("/user/credit/list", name="credit_list")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function creditListAction() {
+    public function creditListAction()
+    {
         $em = $this->getDoctrine()->getManager();
-        $qb = $em->createQueryBuilder();
-
-        $qb->select('c.id, c.value, u.name')
-            ->from('UserBundle\Entity\Credit', 'c')
-            ->leftJoin(
-                'UserBundle\Entity\User',
-                'u',
-                \Doctrine\ORM\Query\Expr\Join::WITH,
-                'c.userId = u.id'
-            );
 
         return $this->render('UserBundle:Default:credit-list.html.twig', array(
-            'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-            'results'   => $qb->getQuery()->getResult()
+            'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..') . DIRECTORY_SEPARATOR,
+            'results' => $em->getRepository('UserBundle:User')->getUserCredits()
         ));
     }
 
     /**
      * @Route("/user/info", name="user_info")
      */
-    public function userInfoAction(Request $request) {
+    public function userInfoAction(Request $request)
+    {
         $em = $this->getDoctrine()->getManager();
+        $chartService = $this->container->get('user.charts');
         $id = $request->get('id');
         $user = $em->getRepository('UserBundle:User')->find($id);
-        $qb = $em->createQueryBuilder();
+        $userCups = $em->getRepository('UserBundle:User')->getUserInfo($id);
+        $yData = $xData = array();
+        $chartData = $chartService->prepareChartData($userCups);
 
-        $qb->select('c')
-            ->from('CupBundle\Entity\Cup', 'c')
-            ->where('c.userId = :userId AND c.createDate >= :date')
-            ->setParameters(array('userId' => $id, 'date' => new \DateTime('midnight first day of this month')));
-
-        $data = $qb->getQuery()->getResult();
-
-        $results = $yData = $xData = array();
-        foreach ($data as $cup) {
-            $date = $cup->getCreateDate();
-            $format = $date->format('m/d/Y');
-            if (isset($results[$format])) {
-                $results[$format] += $cup->getCost()/100;
-            } else {
-                $results[$format] = $cup->getCost()/100;
-            }
-        }
-
-        foreach ($results as $key => $value) {
+        foreach ($chartData as $key => $value) {
             $xData[] = $key;
             $yData[] = $value;
         }
@@ -169,8 +147,8 @@ class DefaultController extends Controller
         $ob->series($series);
 
         return $this->render('UserBundle:Default:info.html.twig', array(
-            'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-            'results'   => $results,
+            'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..') . DIRECTORY_SEPARATOR,
+            'results' => $chartData,
             'user' => $user,
             'chart' => $ob
         ));

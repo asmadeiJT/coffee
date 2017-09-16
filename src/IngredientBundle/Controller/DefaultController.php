@@ -95,22 +95,16 @@ class DefaultController extends Controller
     /**
      * @Route("/ingredient/list", name="ingredient_list")
      */
-    public function listAction()
-    {
+    public function listAction() {
         $em = $this->getDoctrine()->getManager();
-        $qb = $em->createQueryBuilder();
-        $amortization = $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'amortization'))[0]->getValue();
-        $beenCost = $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'been_cost'))[0]->getValue();
-
-
-        $qb->select('a.id, a.name, a.cost, a.isActive')
-            ->from('IngredientBundle\Entity\Ingredient', 'a');
+        $amortization = $em->getRepository('SettingsBundle:Settings')->findOneBy(array('name' => 'amortization'))->getValue();
+        $beenCost = $em->getRepository('SettingsBundle:Settings')->findOneBy(array('name' => 'been_cost'))->getValue();
 
         return $this->render('IngredientBundle:Default:list.html.twig', array(
-            'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..') . DIRECTORY_SEPARATOR,
-            'results' => $qb->getQuery()->getResult(),
-            'amortization' => $amortization,
-            'been_cost' => $beenCost
+            'base_dir'      => realpath($this->container->getParameter('kernel.root_dir') . '/..') . DIRECTORY_SEPARATOR,
+            'results'       => $em->getRepository('IngredientBundle:Ingredient')->getAllIngredients(),
+            'amortization'  => $amortization,
+            'been_cost'     => $beenCost
         ));
     }
 }

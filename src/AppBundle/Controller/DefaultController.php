@@ -13,101 +13,95 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $results    = $this->getHistory();
-        $totals     = $this->getTotals();
-        $em         = $this->getDoctrine()->getManager();
+        $results = $this->getHistory();
+        $userCredits = $this->getUserCredits();
         $totalSpent = $this->getTotalSpent();
-        $bankCash   = $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'current_bank_cash'))[0]->getValue();
-        $credit     = $this->getCredits();
-        $balance    = $bankCash - $credit;
-        $profit     = $this->getProfit($balance);
+        $bankCash = $this->getSetting('current_bank_cash');
+        $credit = $this->getCredits();
+        $balance = $bankCash - $credit;
+        $profit = $this->getProfit($balance);
 
 
         return $this->render('page/home.html.twig', array(
-            'base_dir'      => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-            'results'       => $results,
-            'totals'        => $totals,
-            'cups_count'    => $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'cups_count'))[0]->getValue(),
-            'total_spent'   => array_shift($totalSpent),
-            'credit'        => $credit,
-            'balance'       => $balance,
-            'profit'        => $profit
+            'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..') . DIRECTORY_SEPARATOR,
+            'results' => $results,
+            'totals' => $userCredits,
+            'cups_count' => $this->getSetting('cups_count'),
+            'total_spent' => $totalSpent,
+            'credit' => $credit,
+            'balance' => $balance,
+            'profit' => $profit
         ));
     }
 
     /**
      * Get history of coffee consumption
+     * @return string
      */
-    private function getHistory() {
+    private function getSetting(string $name)
+    {
         $em = $this->getDoctrine()->getManager();
-        $qb = $em->createQueryBuilder();
 
-        $qb->select('u.name', 'a.id', 'a.cost', 'a.createDate')
-            ->from('CupBundle\Entity\Cup', 'a')
-            ->leftJoin(
-                'UserBundle\Entity\User',
-                'u',
-                \Doctrine\ORM\Query\Expr\Join::WITH,
-                'a.userId = u.id'
-            )
-            ->orderBy('a.createDate', 'DESC')
-            ->setMaxResults(20);
+        return $em->getRepository('SettingsBundle:Settings')->findOneBy(array('name' => $name))->getValue();
+    }
 
-        return $qb->getQuery()->getResult();
+    /**
+     * Get history of coffee consumption
+     * @return array
+     */
+    private function getHistory()
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        return $em->getRepository('CupBundle:Cup')
+            ->getLastCups();
     }
 
     /**
      * Get totals of coffee consumption
+     * @return array
      */
-    private function getTotals() {
+    private function getUserCredits()
+    {
         $em = $this->getDoctrine()->getManager();
-        $qb = $em->createQueryBuilder();
 
-        $qb->select('u.id', 'u.name', 'c.value as credit')
-            ->from('UserBundle\Entity\User', 'u')
-            ->leftJoin(
-                'UserBundle\Entity\Credit',
-                'c',
-                \Doctrine\ORM\Query\Expr\Join::WITH,
-                'c.userId = u.id'
-            )
-            ->groupBy('u.name')
-            ->orderBy('u.name', 'DESC');
-
-
-        return $qb->getQuery()->getResult();
+        return $em->getRepository('UserBundle:User')
+            ->getUserCredits();
     }
 
-    private function getTotalSpent() {
+    /**
+     * Get total spent
+     * @return string
+     */
+    private function getTotalSpent()
+    {
         $em = $this->getDoctrine()->getManager();
-        $qb = $em->createQueryBuilder();
 
-        $qb->select('SUM(c.cost) as totalSpent')
-            ->from('CupBundle\Entity\Cup', 'c');
-
-
-        return $qb->getQuery()->getResult();
+        return $em->getRepository('CupBundle:Cup')
+            ->getTotalSpent();
     }
 
-    private function getProfit($balance) {
-        $em                 = $this->getDoctrine()->getManager();
-        $fixedBankCash      = $em->getRepository('SettingsBundle:Settings')->findBy(array('name' => 'fixed_bank_cash'));
-        $fixedBankCashValue = array_shift($fixedBankCash);
-
-        $profit = $balance - $fixedBankCashValue->getValue();
+    /**
+     * Get total spent
+     * @return integer
+     */
+    private function getProfit($balance)
+    {
+        $fixedBankCash = $this->getSetting('fixed_bank_cash');
+        $profit = $balance - $fixedBankCash;
 
         return $profit;
     }
 
-    private function getCredits () {
+    /**
+     * Get total credits
+     * @return string
+     */
+    private function getCredits()
+    {
         $em = $this->getDoctrine()->getManager();
-        $qb = $em->createQueryBuilder();
 
-        $qb->select('SUM(c.value) as totalCredit')
-            ->from('UserBundle\Entity\Credit', 'c');
-
-        $result = $qb->getQuery()->getResult();
-
-        return $result[0]['totalCredit'];
+        return $em->getRepository('UserBundle:Credit')
+            ->getTotalCredits();
     }
 }

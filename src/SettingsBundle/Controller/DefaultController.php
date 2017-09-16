@@ -24,7 +24,8 @@ class DefaultController extends Controller
      * @Route("/settings/add", name="add_setting")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function addAction(Request $request) {
+    public function addAction(Request $request)
+    {
         $setting = new Settings();
         $form = $this->createForm(AddSettings::class, $setting);
         $formView = $form->createView();
@@ -45,8 +46,8 @@ class DefaultController extends Controller
         }
 
         return $this->render('SettingsBundle:Default:add/settings.html.twig', array(
-            'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-            'form'      => $formView
+            'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..') . DIRECTORY_SEPARATOR,
+            'form' => $formView
         ));
     }
 
@@ -54,7 +55,8 @@ class DefaultController extends Controller
      * @Route("/settings/edit", name="edit_setting")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function editAction(Request $request) {
+    public function editAction(Request $request)
+    {
         $em = $this->getDoctrine()->getManager();
         $id = $request->get('id');
         $setting = $em->getRepository('SettingsBundle:Settings')->find($id);
@@ -66,7 +68,7 @@ class DefaultController extends Controller
 
             if (!$setting) {
                 throw $this->createNotFoundException(
-                    'No setting found for id '.$id
+                    'No setting found for id ' . $id
                 );
             }
 
@@ -84,8 +86,8 @@ class DefaultController extends Controller
         $formView = $form->createView();
 
         return $this->render('SettingsBundle:Default:edit/settings.html.twig', array(
-            'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-            'form'      => $formView
+            'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..') . DIRECTORY_SEPARATOR,
+            'form' => $formView
         ));
     }
 
@@ -93,16 +95,13 @@ class DefaultController extends Controller
      * @Route("/settings/list", name="setting_list")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function listAction() {
+    public function listAction()
+    {
         $em = $this->getDoctrine()->getManager();
-        $qb = $em->createQueryBuilder();
-
-        $qb->select('a.id, a.name, a.value')
-            ->from('SettingsBundle\Entity\Settings', 'a');
 
         return $this->render('SettingsBundle:Default:list.html.twig', array(
-            'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
-            'results'   => $qb->getQuery()->getResult()
+            'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..') . DIRECTORY_SEPARATOR,
+            'results' => $em->getRepository('SettingsBundle:Settings')->getAllSettings(),
         ));
     }
 }

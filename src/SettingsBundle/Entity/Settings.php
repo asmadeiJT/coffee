@@ -5,7 +5,7 @@ namespace SettingsBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="SettingsBundle\Repository\SettingsRepository")
  * @ORM\Table(name="settings")
  */
 class Settings

@@ -5,7 +5,7 @@ namespace IngredientBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="IngredientBundle\Repository\IngredientRepository")
  * @ORM\Table(name="ingredients")
  */
 class Ingredient
