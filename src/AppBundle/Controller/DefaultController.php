@@ -51,7 +51,7 @@ class DefaultController extends Controller
                 'a.userId = u.id'
             )
             ->orderBy('a.createDate', 'DESC')
-            ->setMaxResults(10);
+            ->setMaxResults(20);
 
         return $qb->getQuery()->getResult();
     }
