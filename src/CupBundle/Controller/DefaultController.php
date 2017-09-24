@@ -31,7 +31,7 @@ class DefaultController extends Controller
             $amortization = $em->getRepository('SettingsBundle:Settings')->findOneBy(array('name' => 'amortization'))->getValue();
             $cupsCount = $em->getRepository('SettingsBundle:Settings')->findOneBy(array('name' => 'cups_count'));
             $cupsCountValue = $cupsCount->getValue() + $data['choice'];
-            $cost = $calculation->calculateCost($data, $beenCost, $amortization);
+            $cost = $calculation->calculateCost($em, $data, $beenCost, $amortization);
 
             $credit = $em->getRepository('UserBundle:Credit')->findOneBy(array('userId' => $user->getId()));
             $resultCreditAmount = $credit->getValue() - $cost;

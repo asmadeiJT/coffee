@@ -22,6 +22,9 @@ class EditIngredient extends AbstractType
             ->add('cost', IntegerType::class, array(
                 'label' => 'Cost'
             ))
+            ->add('quantity', IntegerType::class, array(
+                'label' => 'Quantity'
+            ))
             ->add('status', ChoiceType::class, array(
                 'label' => 'Status',
                 'choices' => array(

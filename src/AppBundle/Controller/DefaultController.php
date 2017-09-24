@@ -36,9 +36,10 @@ class DefaultController extends Controller
 
     /**
      * Get history of coffee consumption
+     * @param $name string
      * @return string
      */
-    private function getSetting(string $name)
+    private function getSetting($name)
     {
         $em = $this->getDoctrine()->getManager();
 

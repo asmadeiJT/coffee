@@ -1,5 +1,4 @@
 <?php
-// src/IngredientBundle/Entity/Ingredient.php
 namespace IngredientBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -26,6 +25,11 @@ class Ingredient
      * @ORM\Column(type="integer")
      */
     private $cost;
+
+    /**
+     * @ORM\Column(type="integer", options={"default" : 0})
+     */
+    private $quantity;
 
     /**
      * @ORM\Column(type="boolean", options={"default" : 1})
@@ -88,6 +92,30 @@ class Ingredient
     public function getCost()
     {
         return $this->cost;
+    }
+
+    /**
+     * Set quantity
+     *
+     * @param integer $quantity
+     *
+     * @return Ingredient
+     */
+    public function setQuantity($quantity)
+    {
+        $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    /**
+     * Get quantity
+     *
+     * @return integer
+     */
+    public function getQuantity()
+    {
+        return $this->quantity;
     }
 
     /**

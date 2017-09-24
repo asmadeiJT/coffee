@@ -1,16 +1,19 @@
 <?php
 namespace CupBundle\Service;
 
+use Doctrine\ORM\EntityManager;
+
 class Calculation
 {
     /**
      * Calculate ingredients cost
-     * @data array
-     * @beenCost integer
-     * $amortization integer
+     * @param EntityManager $em
+     * @param array $data
+     * @param integer $beenCost
+     * @param integer $amortization
      * @return integer
      */
-    public function calculateCost($data, $beenCost, $amortization)
+    public function calculateCost($em, $data, $beenCost, $amortization)
     {
         $user = $data['user'];
         $userType = $user->getType();
@@ -20,6 +23,11 @@ class Calculation
 
         foreach ($ingredients as $ingredient) {
             $ingredientsCost = $ingredientsCost + $ingredient->getCost();
+            if ($ingredient->getQuantity()) {
+                $ingredient->setQuantity($ingredient->getQuantity() - 1);
+                $em->persist($ingredient);
+                $em->flush();
+            }
         }
 
         $cost = $beenCost + $ingredientsCost;
