@@ -12,6 +12,7 @@
                         <thead>
                         <tr>
                             <td>Name</td>
+                            <td>Type</td>
                             <td>Cost</td>
                             <td>Quantity</td>
                             {% if is_granted('ROLE_ADMIN') %}
@@ -22,11 +23,12 @@
                         <tbody>
                         {% for item in results %}
                             <tr>
-                                <td>{{ item['name'] }}</td>
-                                <td>{{ item['cost'] }}</td>
-                                <td>{{ item['quantity'] }}</td>
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.getType() }}</td>
+                                <td>{{ item.cost }}</td>
+                                <td>{{ item.quantity }}</td>
                                 {% if is_granted('ROLE_ADMIN') %}
-                                    <td><a href="{{ path('edit_ingredient', {'id': item['id']}) }}" onclick="return confirm('Are u sure?')">Edit</a></td>
+                                    <td><a href="{{ path('edit_ingredient', {'id': item.id}) }}" onclick="return confirm('Are u sure?')">Edit</a></td>
                                 {% endif %}
                             </tr>
                         {% endfor %}

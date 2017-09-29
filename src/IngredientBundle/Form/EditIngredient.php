@@ -2,10 +2,10 @@
 
 namespace IngredientBundle\Form;
 
-use IngredientBundle\Entity\Ingredient;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -24,6 +24,15 @@ class EditIngredient extends AbstractType
             ))
             ->add('quantity', IntegerType::class, array(
                 'label' => 'Quantity'
+            ))
+            ->add('type', EntityType::class, array(
+                'label' => 'Type',
+                'class'=>'IngredientBundle\Entity\Type',
+                'query_builder'=> function(EntityRepository $er){
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.name','ASC');},
+                'choice_label' => 'name',
+                'required' => false
             ))
             ->add('status', ChoiceType::class, array(
                 'label' => 'Status',

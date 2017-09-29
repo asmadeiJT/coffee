@@ -17,6 +17,13 @@ class Ingredient
     private $id;
 
     /**
+     * Many Ingredients has One Type.
+     * @ORM\ManyToOne(targetEntity="Type")
+     * @ORM\JoinColumn(name="type_id", referencedColumnName="id")
+     */
+    private $type;
+
+    /**
      * @ORM\Column(type="string")
      */
     private $name;
@@ -116,6 +123,30 @@ class Ingredient
     public function getQuantity()
     {
         return $this->quantity;
+    }
+
+    /**
+     * Set type
+     *
+     * @param integer $type
+     *
+     * @return Ingredient
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return integer
+     */
+    public function getType()
+    {
+        return $this->type->getName();
     }
 
     /**

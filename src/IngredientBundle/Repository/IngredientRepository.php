@@ -10,7 +10,7 @@ class IngredientRepository extends EntityRepository
     {
         return $this->getEntityManager()
             ->createQuery(
-                'SELECT a.id, a.name, a.cost, a.isActive, a.quantity FROM IngredientBundle\Entity\Ingredient a WHERE a.isActive = 1'
+                'SELECT a.id, a.name, a.type, a.cost, a.isActive, a.quantity FROM IngredientBundle\Entity\Ingredient a WHERE a.isActive = 1'
             )
             ->getResult();
     }

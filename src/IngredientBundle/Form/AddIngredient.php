@@ -2,7 +2,9 @@
 
 namespace IngredientBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
 use IngredientBundle\Entity\Ingredient;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,16 +18,26 @@ class AddIngredient extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('Name', TextType::class, array(
+            ->add('name', TextType::class, array(
                 'label' => 'Name'
             ))
-            ->add('Cost', IntegerType::class, array(
+            ->add('cost', IntegerType::class, array(
                 'label' => 'Cost'
             ))
-            ->add('Quantity', IntegerType::class, array(
-                'label' => 'Quantity'
+            ->add('quantity', IntegerType::class, array(
+                'label' => 'Quantity',
+                'data' => 1
             ))
-            ->add('IsActive', ChoiceType::class, array(
+            ->add('type', EntityType::class, array(
+                'label' => 'Type',
+                'class'=>'IngredientBundle\Entity\Type',
+                'query_builder'=> function(EntityRepository $er){
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.name','ASC');},
+                'choice_label' => 'name',
+                'required' => false
+            ))
+            ->add('isActive', ChoiceType::class, array(
                 'label' => 'Status',
                 'choices' => array(
                     1 => 'Enable',

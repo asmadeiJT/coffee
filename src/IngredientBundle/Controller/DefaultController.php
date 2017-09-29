@@ -6,8 +6,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use IngredientBundle\Entity\Ingredient;
+use IngredientBundle\Entity\Type;
 use IngredientBundle\Form\AddIngredient;
+use IngredientBundle\Form\AddType;
 use IngredientBundle\Form\EditIngredient;
+use IngredientBundle\Form\EditType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class DefaultController extends Controller
@@ -24,7 +27,7 @@ class DefaultController extends Controller
      * @Route("/ingredient/add", name="add_ingredient")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function addAction(Request $request) {
+    public function addIngredientAction(Request $request) {
         $ingredient = new Ingredient();
         $form = $this->createForm(AddIngredient::class, $ingredient);
         $formView = $form->createView();
@@ -35,6 +38,8 @@ class DefaultController extends Controller
 
             $ingredient->setName($data->getName());
             $ingredient->setCost($data->getCost());
+            $ingredient->setQuantity($data->getQuantity());
+            $ingredient->setType($data->getType()->getId());
             $ingredient->setIsActive($data->getIsActive());
 
             $em = $this->getDoctrine()->getManager();
@@ -55,7 +60,7 @@ class DefaultController extends Controller
      * @Route("/ingredient/edit", name="edit_ingredient")
      * @Security("has_role('ROLE_ADMIN')")
      */
-    public function editAction(Request $request) {
+    public function editIngredientAction(Request $request) {
         $em = $this->getDoctrine()->getManager();
         $id = $request->get('id');
         $ingredient = $em->getRepository('IngredientBundle:Ingredient')->find($id);
@@ -71,9 +76,11 @@ class DefaultController extends Controller
                 );
             }
 
-            $ingredient->setName($data['name']);
-            $ingredient->setCost($data['cost']);
-            $ingredient->setIsActive($data['status']);
+            $ingredient->setName($data->getName());
+            $ingredient->setCost($data->getCost());
+            $ingredient->setQuantity($data->getQuantity());
+            $ingredient->setType($data->getType()->getId());
+            $ingredient->setIsActive($data->getIsActive());
 
             $em->persist($ingredient);
             $em->flush();
@@ -95,16 +102,97 @@ class DefaultController extends Controller
     /**
      * @Route("/ingredient/list", name="ingredient_list")
      */
-    public function listAction() {
+    public function ingredientListAction() {
         $em = $this->getDoctrine()->getManager();
         $amortization = $em->getRepository('SettingsBundle:Settings')->findOneBy(array('name' => 'amortization'))->getValue();
         $beenCost = $em->getRepository('SettingsBundle:Settings')->findOneBy(array('name' => 'been_cost'))->getValue();
 
-        return $this->render('IngredientBundle:Default:list.html.twig', array(
+        $test = $em->getRepository('IngredientBundle:Ingredient')->findBy(array('isActive' => true));
+        return $this->render('IngredientBundle:Default:list/ingredient.html.twig', array(
             'base_dir'      => realpath($this->container->getParameter('kernel.root_dir') . '/..') . DIRECTORY_SEPARATOR,
-            'results'       => $em->getRepository('IngredientBundle:Ingredient')->getAllIngredients(),
+            'results'       => $em->getRepository('IngredientBundle:Ingredient')->findBy(array('isActive' => true)),
             'amortization'  => $amortization,
             'been_cost'     => $beenCost
+        ));
+    }
+
+    /**
+     * @Route("ingredient/type/add", name="add_ingredient_type")
+     * @Security("has_role('ROLE_ADMIN')")
+     */
+    public function addTypeAction(Request $request) {
+        $type = new Type();
+        $form = $this->createForm(AddType::class, $type);
+        $formView = $form->createView();
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            $type->setName($data->getName());
+
+            $em = $this->getDoctrine()->getManager();
+
+            $em->persist($type);
+            $em->flush();
+
+            return $this->redirectToRoute('ingredient_type_list');
+        }
+
+        return $this->render('IngredientBundle:Default:add/type.html.twig', array(
+            'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+            'form'      => $formView
+        ));
+    }
+
+    /**
+     * @Route("ingredient/type/edit", name="edit_ingredient_type")
+     * @Security("has_role('ROLE_ADMIN')")
+     */
+    public function editTypeAction(Request $request) {
+        $em = $this->getDoctrine()->getManager();
+        $id = $request->get('id');
+        $type = $em->getRepository('IngredientBundle:Type')->find($id);
+        $form = $this->createForm(EditType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            if (!$type) {
+                throw $this->createNotFoundException(
+                    'No ingredient found for id '.$id
+                );
+            }
+
+            $type->setName($data['name']);
+
+            $em->persist($type);
+            $em->flush();
+
+            return $this->redirectToRoute('ingredient_type_list');
+        }
+
+        $form->get('name')->setData($type->getName());
+
+        $formView = $form->createView();
+
+        return $this->render('IngredientBundle:Default:edit/type.html.twig', array(
+            'base_dir'  => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
+            'form'      => $formView
+        ));
+    }
+
+    /**
+     * @Route("ingredient/type/list", name="ingredient_type_list")
+     */
+    public function typeListAction() {
+        $em = $this->getDoctrine()->getManager();
+        $types = $em->getRepository('IngredientBundle:Type')->findAll();
+
+        return $this->render('IngredientBundle:Default:list/type.html.twig', array(
+            'base_dir'      => realpath($this->container->getParameter('kernel.root_dir') . '/..') . DIRECTORY_SEPARATOR,
+            'results'       => $types
         ));
     }
 }

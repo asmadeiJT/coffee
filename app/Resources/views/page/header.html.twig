@@ -19,6 +19,8 @@
                     <ul class="dropdown-menu">
                         {% if is_granted('ROLE_ADMIN') %}
                             <li><a href="{{ path('add_ingredient') }}">Add Ingredient</a></li>
+                            <li><a href="{{ path('add_ingredient_type') }}">Add Type</a></li>
+                            <li><a href="{{ path('ingredient_type_list') }}">Types List</a></li>
                         {% endif %}
                         <li><a href="{{ path('ingredient_list') }}">Ingredient List</a></li>
                     </ul>
